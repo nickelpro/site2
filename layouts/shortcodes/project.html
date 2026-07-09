@@ -1,0 +1,6 @@
+{{ $project := dict
+  "title" (.Get "title")
+  "href" (.Get "href")
+  "body" (.Inner | markdownify)
+}}
+{{ .Page.Scratch.Add "topProjects" (slice $project) }}

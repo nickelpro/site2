@@ -1,0 +1,32 @@
+@mixin shell-dark-mode {
+  .dark-mode {
+    background-color: #282c34;
+    color: $gold;
+  }
+}
+
+@mixin light-toggle-dark {
+  .dark-mode .light-toggle {
+    stroke: $gold;
+  }
+}
+
+@mixin light-toggle-base($with-width-auto: false, $with-left-auto: false) {
+  .light-toggle {
+    height: 1.6rem;
+
+    @if $with-width-auto {
+      width: auto;
+    }
+
+    @if $with-left-auto {
+      margin-left: auto;
+    }
+
+    margin-right: 1rem;
+    cursor: pointer;
+
+    stroke: $black;
+    stroke-width: 7;
+  }
+}

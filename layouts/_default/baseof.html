@@ -1,0 +1,101 @@
+{{ $isBlogList := or .IsHome (eq .Kind "section") }}
+{{ $pageDescription := .Site.Params.description }}
+{{ if .IsPage }}
+  {{ $pageDescription = .Description }}
+{{ end }}
+{{ $stylePath := "scss/blog.scss" }}
+{{ if not $isBlogList }}
+  {{ $stylePath = "scss/post.scss" }}
+{{ end }}
+{{ $style := resources.Get $stylePath | toCSS (dict "outputStyle" "compressed") | fingerprint }}
+{{ $googleFonts := resources.Get "css/Google-Fonts.css" | minify }}
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Locale }}">
+  <head>
+    <meta charset="utf-8">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    {{ hugo.Generator }}
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="{{ .Site.Params.author.name }}">
+    <meta property="og:url" content="{{ .Permalink }}">
+
+    {{ if $isBlogList -}}
+    <title>{{ .Site.Title }}</title>
+    <meta property="og:title" content="{{ .Site.Title }}">
+    <meta property="og:type" content="website">
+    <meta name="description" content="{{ .Site.Params.description }}">
+    {{- else -}}
+    <title>{{ .Title | htmlUnescape | safeHTML }} - {{ .Site.Title }}</title>
+    {{ if .Params.mediaTitle }}
+    <meta property="og:title" content="{{ .Params.mediaTitle }}">
+    {{ else if .Params.subtitle }}
+    <meta property="og:title" content="{{ .Title }}: {{ .Params.subtitle }}">
+    {{ else }}
+    <meta property="og:title" content="{{ .Title }}">
+    {{ end }}
+    <meta property="og:type" content="article">
+    <meta property="og:description" content="{{ $pageDescription }}">
+    <meta name="description" content="{{ $pageDescription }}">
+    <meta name="twitter:description" content="{{ $pageDescription }}">
+    {{ if .Params.Image }}
+      {{ $img := .Page.Resources.GetMatch (printf "*%s*" .Params.Image) }}
+      <meta property="og:image" content="{{ $img.Permalink }}">
+      <meta property="og:image:url" content="{{ $img.Permalink }}">
+      <meta property="og:image:width" content="{{ $img.Width }}">
+      <meta property="og:image:height" content="{{ $img.Height }}">
+      <meta name="twitter:card" content="summary_large_image">
+    {{ end }}
+    <link rel="preload" as="font" href="../../fonts/Plate188/Plate188.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="../../fonts/Essays1743/Essays1743.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="../../fonts/Alegreya/Alegreya-Regular.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="../../fonts/Alegreya/Alegreya-Italic.woff2" type="font/woff2" crossorigin>
+    <link rel="preload" as="font" href="../../fonts/Symbola/Symbola-Lite.woff2" type="font/woff2" crossorigin>
+    <style>
+      {{ (resources.Get "css/Alegreya.css" | minify).Content | safeCSS }}
+      {{ (resources.Get "css/Plate188.css" | minify).Content | safeCSS }}
+      {{ (resources.Get "css/Essays1743.css" | minify).Content | safeCSS }}
+      {{ (resources.Get "css/Symbola-Lite.css" | minify).Content | safeCSS }}
+    </style>
+    <style>
+      body {
+        visibility: hidden;
+        opacity: 0;
+      }
+    </style>
+    <script>{{ (resources.Get "js/collapse.js" | minify).Content | safeJS }}</script>
+    {{- end }}
+
+    <link rel="stylesheet" href="{{ $style.RelPermalink }}">
+    <script>{{ (resources.Get "js/darktoggle.js" | minify).Content | safeJS }}</script>
+    <style>{{ $googleFonts.Content | safeCSS }}</style>
+    <link href="{{ "index.xml" | relURL }}" rel="alternate" type="application/rss+xml" title="{{ .Site.Title }}">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-176821386-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-176821386-1');
+    </script>
+  </head>
+  <body>
+    <noscript>
+      <style>
+        body {
+          visibility: visible;
+          opacity: 1;
+        }
+      </style>
+    </noscript>
+    <div class="container">
+      {{ block "main" . }}{{ end }}
+      {{ partial "blog_footer.html" . }}
+    </div>
+    <script>{{ (resources.Get "js/darkmode.js" | minify).Content | safeJS }}</script>
+  </body>
+</html>

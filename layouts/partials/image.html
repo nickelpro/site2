@@ -1,0 +1,62 @@
+{{ $ctx := .ctx }}
+{{ $wrapper := .wrapper | default "figure" }}
+{{ $srcName := $ctx.Get "src" }}
+{{ $light := $ctx.Page.Resources.GetMatch (printf "*%s*" $srcName) }}
+{{ if not $light }}
+  {{ errorf "unable to find image %q in %s" $srcName $ctx.Page.File.Path }}
+{{ end }}
+{{ $darkName := $ctx.Get "darksrc" }}
+{{ $dark := false }}
+{{ if $darkName }}
+  {{ $dark = $ctx.Page.Resources.GetMatch (printf "*%s*" $darkName) }}
+  {{ if not $dark }}
+    {{ errorf "unable to find dark image %q in %s" $darkName $ctx.Page.File.Path }}
+  {{ end }}
+{{ end }}
+{{ $resize := $ctx.Get "resize" }}
+{{ if and $resize (ne (lower (path.Ext $light.Name)) ".svg") }}
+  {{ $light = $light.Resize $resize }}
+  {{ if $dark }}
+    {{ $dark = $dark.Resize $resize }}
+  {{ end }}
+{{ end }}
+{{ $inner := .inner | default "" | strings.TrimSpace }}
+{{ $hasCaption := or $inner ($ctx.Get "caption") }}
+{{ $className := "" }}
+{{ with $ctx.Get "darkmode" }}
+  {{ $className = printf "dark-%s" . }}
+{{ end }}
+{{ if eq $wrapper "figure" }}
+  {{ if not ($ctx.Get "shape-outside") }}
+  <figure style="text-align: center; position: relative; {{ $ctx.Get "style" | safeCSS }}">
+  {{ end }}
+    <img
+      src="{{ $light.RelPermalink }}"
+      alt="{{ $ctx.Get "alt" }}"
+      loading="lazy"
+      {{ with $className }}class="{{ . }}"{{ end }}
+      {{ if $dark }}data-lightsrc="{{ $light.RelPermalink }}" data-darksrc="{{ $dark.RelPermalink }}"{{ end }}
+      style="display: block; {{ $ctx.Get "imgstyle" | safeCSS }} {{ if ($ctx.Get "shape-outside") }} shape-outside: url({{ $light.RelPermalink }}); {{ end }}"
+    >
+    {{ if and (not ($ctx.Get "shape-outside")) $hasCaption }}
+      <figcaption style="{{ $ctx.Get "figstyle" | safeCSS }}">
+        {{ if $inner }}
+          {{ $inner | markdownify }}
+        {{ else }}
+          {{ $ctx.Get "caption" | markdownify }}
+        {{ end }}
+      </figcaption>
+    {{ end }}
+  {{ if not ($ctx.Get "shape-outside") }}
+  </figure>
+  {{ end }}
+{{ else }}
+  <img
+    src="{{ $light.RelPermalink }}"
+    alt="{{ $ctx.Get "alt" }}"
+    loading="lazy"
+    {{ with $className }}class="{{ . }}"{{ end }}
+    {{ if $dark }}data-lightsrc="{{ $light.RelPermalink }}" data-darksrc="{{ $dark.RelPermalink }}"{{ end }}
+    style="display: block; {{ $ctx.Get "style" | safeCSS }} {{ if ($ctx.Get "shape-outside") }} shape-outside: url({{ $light.RelPermalink }}); {{ end }}"
+  >
+{{ end }}

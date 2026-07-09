@@ -1,0 +1,6 @@
+@font-face {
+  font-family: 'Symbola';
+  font-style: normal;
+  src: url(../../fonts/Symbola/Symbola-Lite.woff2) format('woff2');
+  font-display: swap;
+}

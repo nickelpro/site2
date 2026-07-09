@@ -1,0 +1,75 @@
+{{ .Scratch.Set "topEducation" (slice) }}
+{{ .Scratch.Set "topExperience" (slice) }}
+{{ $summary := .Content }}
+{{ $education := .Scratch.Get "topEducation" }}
+{{ $experience := .Scratch.Get "topExperience" }}
+{{ partial "top_head.html" . }}
+  <body class="top-page">
+    <div class="top-shell">
+      {{ partial "top_header.html" . }}
+      <main class="top-main">
+        <section class="top-hero top-hero--compact">
+          <h1 class="top-title">{{ .Title }}</h1>
+          <p class="top-deck">{{ .Description }}</p>
+        </section>
+
+        <div class="top-section-stack">
+          <section class="top-panel top-panel--single">
+            <h2 class="top-panel__title">Summary</h2>
+            <div class="top-prose">
+              {{ $summary }}
+            </div>
+          </section>
+
+          {{ with $education }}
+          <section class="top-panel top-panel--single">
+            <h2 class="top-panel__title">Education</h2>
+            <div class="top-detail-list">
+              {{ range . }}
+              <article class="top-detail">
+                <header class="top-detail__header">
+                  <div>
+                    <h3 class="top-detail__title">{{ index . "degree" }}</h3>
+                    <p class="top-detail__meta">{{ index . "institution" }}</p>
+                  </div>
+                  <p class="top-detail__dates">{{ index . "dates" }}</p>
+                </header>
+                {{ with index . "body" }}
+                <div class="top-detail__body">
+                  {{ . }}
+                </div>
+                {{ end }}
+              </article>
+              {{ end }}
+            </div>
+          </section>
+          {{ end }}
+
+          {{ with $experience }}
+          <section class="top-panel top-panel--single">
+            <h2 class="top-panel__title">Experience</h2>
+            <div class="top-detail-list">
+              {{ range . }}
+              <article class="top-detail">
+                <header class="top-detail__header">
+                  <div>
+                    <h3 class="top-detail__title">{{ index . "title" }}</h3>
+                    <p class="top-detail__meta">{{ index . "organization" }}</p>
+                  </div>
+                  <p class="top-detail__dates">{{ index . "dates" }}</p>
+                </header>
+                {{ with index . "body" }}
+                <div class="top-detail__body">
+                  {{ . }}
+                </div>
+                {{ end }}
+              </article>
+              {{ end }}
+            </div>
+          </section>
+          {{ end }}
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

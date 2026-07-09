@@ -1,0 +1,31 @@
+@font-face {
+  font-family: 'Essays1743';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Essays1743'), url(../../fonts/Essays1743/Essays1743.woff2) format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Essays1743';
+  font-style: italic;
+  font-weight: 400;
+  src: local('Essays1743 Italic'), url(../../fonts/Essays1743/Essays1743-Italic.woff2) format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Essays1743';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Essays1743 Bold'), url(../../fonts/Essays1743/Essays1743-Bold.woff2) format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Essays1743';
+  font-style: italic;
+  font-weight: 700;
+  src: local('Essays1743 Bold Italic'), url(../../fonts/Essays1743/Essays1743-BoldItalic.woff2) format('woff2');
+  font-display: swap;
+}

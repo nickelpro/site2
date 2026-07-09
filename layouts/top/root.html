@@ -1,0 +1,57 @@
+{{ .Scratch.Set "topProjects" (slice) }}
+{{ $prose := .Content }}
+{{ $projects := .Scratch.Get "topProjects" }}
+{{ partial "top_head.html" . }}
+  <body class="top-page">
+    <div class="top-shell">
+      {{ partial "top_header.html" . }}
+      <main class="top-main">
+        <section class="top-hero">
+          <h1 class="top-title">{{ .Site.Params.author.name }}</h1>
+          <p class="top-deck">{{ .Description }}</p>
+        </section>
+
+        <div class="top-layout">
+          <div class="top-layout__primary">
+            <section class="top-panel top-panel--content">
+              <div class="top-prose">
+                {{ $prose }}
+              </div>
+            </section>
+
+            {{ with $projects }}
+            <section class="top-panel top-panel--projects">
+              <h2 class="top-panel__title">Projects</h2>
+              <div class="top-project-list">
+                {{ range . }}
+                <article class="project-card">
+                  <h3 class="project-card__title"><a href="{{ index . "href" }}">{{ index . "title" }}</a></h3>
+                  <div class="project-card__body">
+                    {{ index . "body" }}
+                  </div>
+                </article>
+                {{ end }}
+              </div>
+            </section>
+            {{ end }}
+          </div>
+
+          <section class="top-panel top-panel--writing">
+            <h2 class="top-panel__title">Writings</h2>
+            <ol class="top-writing-list">
+              {{ range first 5 ((where site.RegularPages "Type" "posts").ByDate.Reverse) }}
+              <li class="top-writing-item">
+                <time class="top-writing-date" datetime="{{ .Date.Format "2006-01-02 15:04:05 MST" }}">{{ .Date.Format "Jan 02, 2006" }}</time>
+                <a class="top-writing-link" href="{{ .Permalink }}">{{ .Title | safeHTML }}</a>
+                {{ with .Params.subtitle }}
+                <p class="top-writing-subtitle">{{ . | plainify }}</p>
+                {{ end }}
+              </li>
+              {{ end }}
+            </ol>
+          </section>
+        </div>
+      </main>
+    </div>
+  </body>
+</html>

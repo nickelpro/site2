@@ -1,0 +1,35 @@
+<footer class="site-footer">
+  <span itemscope itemtype="http://schema.org/Person">
+    <link itemprop="url" href="{{ .Site.Params.homeURL }}">
+    <span itemprop="name">{{ .Site.Params.author.name }}</span>
+
+    {{ if isset .Site.Params "work" }},
+    <span itemprop="jobTitle">{{ .Site.Params.work.jobTitle }}</span>
+    {{ if isset .Site.Params.work "company" }} at
+    <span itemprop="memberOf" itemscope itemtype="http://schema.org/Organization"><a itemprop="url" href="{{ .Site.Params.work.companyUrl }}"><span itemprop="name">{{ .Site.Params.work.company }}</span></a></span>
+    {{ end }}
+    {{ end }}
+
+    <br>
+
+    {{ if isset .Site.Params "githubusername" }}
+    <a itemprop="sameAs" href="https://github.com/{{ .Site.Params.githubUsername }}" title="GitHub">GH</a>
+    {{ end }}
+
+    {{ if isset .Site.Params "twitterusername" }}
+    <a itemprop="sameAs" href="https://twitter.com/{{ .Site.Params.twitterUsername }}" title="Twitter">TW</a>
+    {{ end }}
+
+    {{ if isset .Site.Params "instagramusername" }}
+    <a itemprop="sameAs" href="https://www.instagram.com/{{ .Site.Params.instagramUsername }}" title="Instagram">IG</a>
+    {{ end }}
+
+    {{ if isset .Site.Params "redditusername" }}
+    <a itemprop="sameAs" href="https://www.reddit.com/user/{{ .Site.Params.redditUsername }}" title="Reddit">RD</a>
+    {{ end }}
+
+    {{ if isset .Site.Params "gpg" }}
+    <a itemprop="sameAs" href="{{ .Site.Params.gpg.link }}" title="GPG {{ .Site.Params.gpg.key }} (fingerprint: {{ .Site.Params.gpg.fingerprint }})">GPG</a>
+    {{ end }}
+  </span>
+</footer>

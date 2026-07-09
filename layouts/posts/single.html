@@ -1,0 +1,40 @@
+{{ define "main" }}
+  <header class="page-header">
+    <nav class="site-nav">
+      <a href="{{ .Site.BaseURL }}">Index</a>
+    </nav>
+    <div class="light-arrow"></div>
+    <svg class="light-toggle" onclick="darkToggle()" viewBox="0 0 200 200">{{ (resources.Get "svg/sun.svg" | minify).Content | safeHTML }}</svg>
+    <time class="post-date" datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "02 Jan 2006" }}</time>
+  </header>
+  <article class="post">
+    <header class="post-header">
+      {{ if isset .Params "display" }}
+      <h1 class="post-title">{{ .Params.display | safeHTML }}</h1>
+      {{ else }}
+      <h1 class="post-title">{{ .Title | safeHTML }}</h1>
+      {{ end }}
+      {{ if isset .Params "subtitle" }}
+      <h2 class="post-subtitle">{{ .Params.subtitle | safeHTML }}</h2>
+      {{ end }}
+      {{ if isset .Params "subsubtitle" }}
+      <h3 class="post-subsubtitle">{{ .Params.subsubtitle | safeHTML }}</h3>
+      {{ end }}
+      <div class="fleuron"></div>
+      {{ if isset .Params "postnote" }}
+      <p class="postnote">{{ .Params.postnote | safeHTML }}</p>
+      {{ end }}
+      {{ if isset .Params "preepigraph" }}
+      <p class="pre-epigraph">{{ .Params.preEpigraph | safeHTML }}</p>
+      <hr>
+      {{ end }}
+      {{ if isset .Params "epigraph" }}
+      <p class="epigraph">{{ .Params.epigraph | safeHTML }}</p>
+      {{ if isset .Params "epigraphauthor" }}
+      <p class="epigraph-author">— {{ .Params.epigraphAuthor | safeHTML }}</p>
+      {{ end }}
+      {{ end }}
+    </header>
+    {{ .Content }}
+  </article>
+{{ end }}

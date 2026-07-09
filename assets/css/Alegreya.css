@@ -1,0 +1,31 @@
+@font-face {
+  font-family: 'Alegreya';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../../fonts/Alegreya/Alegreya-Regular.woff2) format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Alegreya';
+  font-style: italic;
+  font-weight: 400;
+  src: url(../../fonts/Alegreya/Alegreya-Italic.woff2) format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Alegreya';
+  font-style: normal;
+  font-weight: 700;
+  src: url(../../fonts/Alegreya/Alegreya-Bold.woff2) format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Alegreya';
+  font-style: italic;
+  font-weight: 700;
+  src: url(../../fonts/Alegreya/Alegreya-BoldItalic.woff2) format('woff2');
+  font-display: swap;
+}

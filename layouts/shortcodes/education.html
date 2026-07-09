@@ -1,0 +1,7 @@
+{{ $entry := dict
+  "degree" (.Get "degree")
+  "institution" (.Get "institution")
+  "dates" (.Get "dates")
+  "body" (.Inner | markdownify)
+}}
+{{ .Page.Scratch.Add "topEducation" (slice $entry) }}

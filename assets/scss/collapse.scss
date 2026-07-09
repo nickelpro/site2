@@ -1,0 +1,145 @@
+$black: #303030 !default;
+$dark-gray: #4d4d4d !default;
+$gray: #686868 !default;
+$medium-gray: #b9b9b9 !default;
+$light-gray: #e5e5e5 !default;
+
+.collapse-button {
+  border-style: none;
+  background: none;
+  outline: none;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.collapse-close {
+  border-style: none;
+  background: none;
+  outline: none;
+  width: 100%;
+}
+
+.collapse-button:hover,
+.collapse-close:hover {
+  cursor: pointer;
+}
+
+.button-ornament {
+  margin: 0.1rem 0;
+}
+
+.dark-mode .button-ornament::before {
+  color: $light-gold;
+}
+
+.button-ornament::before {
+  color: $dark-gray;
+  font-size: 1.75rem;
+  font-family: Symbola;
+  content: "\1F65C";
+}
+
+.dark-mode .button-label {
+  color: $gold;
+}
+
+.button-label {
+  color: $black;
+  font-size: 1.2rem;
+  font-style: italic;
+  margin: 0.4rem 0;
+  font-family: Essays1743;
+}
+
+.collapse-left,
+.collapse-right {
+  display: flex;
+  width: 20%;
+}
+
+.collapse-right {
+  justify-content: flex-end;
+}
+
+.collapse-center {
+  display: flex;
+  width: 60%;
+  justify-content: center;
+}
+
+.dark-mode .collapse-right::after {
+  color: $light-gold;
+}
+
+.collapse-right::after {
+  font-family: Symbola;
+  content: "\2BAF";
+  font-weight: bold;
+  font-size: 1.3rem;
+  margin: 0.5rem 0.5rem 0;
+  color: $dark-gray;
+}
+
+.dark-mode .collapse-close::after {
+  color: $light-gold;
+}
+
+.collapse-close::after {
+  font-family: Essays1743;
+  content: "X";
+  font-size: 1.3rem;
+  color: $dark-gray;
+  margin: 0.2rem 0 0.8rem;
+  display: inline-block;
+}
+
+.dark-mode .collapse-center span::after {
+  background: $light-gold;
+}
+
+.collapse-center span::after {
+  content: "";
+  width: 0;
+  display: block;
+  height: 2px;
+  border-radius: 10rem;
+  position: relative;
+  margin: 0 auto;
+  background: $gray;
+  transition: width 0.3s;
+}
+
+.collapse-button:hover .collapse-center span::after {
+  width: 100%;
+}
+
+.dark-mode .collapsible {
+  border: 0.1em solid #4e4a3b;
+}
+
+.collapsible {
+  width: 100%;
+  text-align: center;
+  border-radius: 1rem;
+  border: 0.1em solid $medium-gray;
+  overflow: hidden;
+}
+
+.collapse-div {
+  height: 0;
+  overflow: hidden;
+}
+
+.collapse-inner {
+  font-family: "Averia Libre";
+  text-align: left;
+  font-size: 0.9rem;
+  margin: 0 1rem;
+}
+
+.collapse-inner .highlight {
+  @media screen and (max-width: $break-small) {
+    overflow-wrap: anywhere;
+  }
+}

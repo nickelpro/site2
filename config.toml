@@ -1,0 +1,27 @@
+baseURL = "https://blog.vito.nyc/"
+locale = "en-us"
+title = "vito.nyc"
+disableKinds = ["taxonomy", "term"]
+
+[params]
+homeURL = "https://vito.nyc"
+description = "Personal Site"
+tagline = "Taglines are for nerds"
+email = "vito@gamberini.email"
+githubUsername = "nickelpro"
+twitterUsername = "VitoGamberini"
+redditUsername = "not_a_novel_account"
+instagramUsername = "vito.gamberini"
+
+[params.work]
+jobTitle = "Deep Sea Noodle"
+
+[params.author]
+fullname = "Nicholas Vito Gamberini"
+name = "Vito Gamberini"
+
+[markup.goldmark.renderer]
+unsafe = true
+
+[markup.highlight]
+noClasses = false

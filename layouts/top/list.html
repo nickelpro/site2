@@ -1,0 +1,23 @@
+{{ partial "top_head.html" . }}
+  <body class="top-page">
+    <div class="top-shell">
+      {{ partial "top_header.html" . }}
+      <main class="top-main">
+        <section class="top-hero top-hero--compact">
+          <p class="top-kicker">Top Pages</p>
+          <h1 class="top-title">Section index</h1>
+        </section>
+
+        <section class="top-panel top-panel--single">
+          <ol class="top-writing-list">
+            {{ range .Pages.ByTitle }}
+            <li class="top-writing-item">
+              <a class="top-writing-link" href="{{ .RelPermalink }}">{{ .Title }}</a>
+            </li>
+            {{ end }}
+          </ol>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

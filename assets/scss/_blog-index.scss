@@ -1,0 +1,8 @@
+@include shell-dark-mode;
+@include light-toggle-dark;
+
+.sub-header {
+  display: flex;
+}
+
+@include light-toggle-base($with-width-auto: true, $with-left-auto: true);

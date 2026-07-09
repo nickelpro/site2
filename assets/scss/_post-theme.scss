@@ -1,0 +1,67 @@
+$monospace: 'Source Code Pro';
+$code-red: rgb(177, 0, 35);
+$code-dark: #c20a0a;
+
+.dark-mode .dark-img-fill {
+  background: #8d762c;
+}
+
+.dark-mode .epigraph {
+  color: #a38c31;
+}
+
+.epigraph {
+  color: $quote-text;
+  width: 80%;
+  margin: auto;
+  font-style: italic;
+  text-align: center;
+}
+
+.dark-mode .epigraph-author {
+  color: #a38c31;
+}
+
+.epigraph-author {
+  color: $quote-text;
+  width: 80%;
+  margin: auto;
+  font-style: italic;
+  text-align: right;
+}
+
+.pre-epigraph {
+  width: 90%;
+  margin: auto;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-align: center;
+  font-family: 'Essays1743';
+  font-weight: normal;
+}
+
+@include shell-dark-mode;
+
+.dark-mode :is(p, a, li)>code {
+  color: $code-dark;
+  font-family: $monospace;
+}
+
+.dark-mode .dark-diff {
+  mix-blend-mode: difference;
+}
+
+.dark-mode .dark-light {
+  mix-blend-mode: lighten;
+}
+
+.dark-mode .dark-filter {
+  filter: invert(1) sepia(1) saturate(2000%) brightness(50%) hue-rotate(-6deg);
+  mix-blend-mode: lighten;
+}

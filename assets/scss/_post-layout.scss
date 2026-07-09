@@ -1,0 +1,112 @@
+.page-header {
+  display: flex;
+
+  margin-bottom: 1.5rem;
+}
+
+.site-nav a::before {
+  content: '\2190';
+  margin-right: .25rem;
+}
+
+@include light-toggle-dark;
+@include light-toggle-base;
+
+.light-arrow {
+  margin-left: auto;
+}
+
+.light-arrow::before {
+  font-family: Symbola;
+  font-size: 1.2rem;
+  content: "\27a5";
+}
+
+.post-header {
+  margin-bottom: 2rem;
+}
+
+.post-title {
+  margin: 0;
+}
+
+.post-header>.fleuron {
+  margin: 1rem 0 0;
+}
+
+.fleuron::before {
+  width: 100%;
+  clear: both;
+  display: block;
+  text-align: center;
+  font-family: Symbola;
+  font-size: 1.5rem;
+  margin: $std-margin;
+  content: "\2767";
+}
+
+.post-subtitle {
+  font-size: 1.5rem;
+}
+
+.dark-mode .godbolt {
+  color: $code-dark;
+
+  &:hover {
+    color: $link-hover;
+  }
+}
+
+.godbolt {
+  font-family: 'Essays1743';
+  color: $code-red;
+  border-bottom: 0;
+  font-size: 1.3rem;
+  float: right;
+  margin: 0 1rem;
+}
+
+article>h2::before {
+  display: block;
+  text-align: center;
+  font-family: Symbola;
+  font-size: 1.5rem;
+  margin: $std-margin;
+  content: "\2767";
+}
+
+.dark-mode article>p:first-of-type::first-letter {
+  background-color: #8d762c;
+  color: $black;
+}
+
+article>p:first-of-type::first-letter {
+  font-family: 'Plate188';
+  color: #000000;
+  font-size: 6.3rem;
+  float: left;
+  margin-right: 0.5rem;
+  line-height: 1.0;
+}
+
+.footnote-ref {
+  border-bottom: none;
+  color: $code-red;
+}
+
+.dark-mode figcaption {
+  color: #9b8a59;
+}
+
+figcaption {
+  color: #525252;
+}
+
+pre {
+  border-radius: 1rem;
+}
+
+:is(p, a, li)>code {
+  color: $code-red;
+  font-family: $monospace;
+}

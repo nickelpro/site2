@@ -1,0 +1,25 @@
+<aside class="collapsible">
+  <button role="presentation" onclick="collapseToggle(this)" class="collapse-button">
+    <span class="collapse-left"></span>
+    <span class="collapse-center">
+      <span class="{{ if (.Get "label") }}button-label{{ else }}button-ornament{{ end }}">
+        {{ if (.Get "label") }}
+          {{ .Get "label" }}
+        {{ end }}
+      </span>
+    </span>
+    <span class="collapse-right"></span>
+  </button>
+  <div class="collapse-div">
+    <div class="collapse-inner">
+      {{ if (.Get "preamble") }}
+        <p>{{ .Get "preamble" | markdownify }}</p>
+      {{ end }}
+      {{ if (.Get "godbolt") }}
+        <a class="godbolt" href="{{ .Get "godbolt" }}">godbolt</a>
+      {{ end }}
+      {{ .Inner | markdownify }}
+      <button role="presentation" onclick="collapseClose(this)" class="collapse-close"></button>
+    </div>
+  </div>
+</aside>

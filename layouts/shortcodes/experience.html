@@ -1,0 +1,7 @@
+{{ $entry := dict
+  "title" (.Get "title")
+  "organization" (.Get "organization")
+  "dates" (.Get "dates")
+  "body" (.Inner | markdownify)
+}}
+{{ .Page.Scratch.Add "topExperience" (slice $entry) }}

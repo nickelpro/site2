@@ -1,0 +1,11 @@
+<header class="top-header">
+  <nav class="top-nav" aria-label="Primary">
+    <a class="top-home" href="/">{{ .Site.Title }}</a>
+    <div class="top-nav__links">
+      <a class="{{ if eq .Layout "root" }}is-current{{ end }}" href="/">Home</a>
+      <a href="https://blog.vito.nyc">Blog</a>
+      <a class="{{ if eq .Layout "about" }}is-current{{ end }}" href="/about">About</a>
+      <a href="mailto:{{ .Site.Params.email }}">Contact</a>
+    </div>
+  </nav>
+</header>
