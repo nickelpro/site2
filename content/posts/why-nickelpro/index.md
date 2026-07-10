@@ -6,8 +6,8 @@ epigraph: "Context: This site used to be located at https://nickelp.ro"
 ---
 
 This is a pretty common question, enough that I can milk it for some blog
-content. The short answer is this, I've been `nickelpro` for as long as I've
-been on the internet. My site is `nickelp.ro` because `nickel.pro` got sniped
+content. The short answer is this, I've been {{< rb >}}nickelpro{{< /rb >}} for as long as I've
+been on the internet. My site is {{< rb >}}nickelp.ro{{< /rb >}} because {{< rb >}}nickel.pro{{< /rb >}} got sniped
 by a [domain squatter](https://en.wikipedia.org/wiki/Cybersquatting) before I
 could get to it, back when `.pro` TLDs cost waaaay too much money. The domain
 has grown on me over the years, since `.pro` is supposed to be for
@@ -15,8 +15,8 @@ professionals and I've never been much of a professional anything.
 
 ## But why nickelpro?
 
-Well, for starters, I lied! I haven't always been `nickelpro`, my first ever
-handle was the much more mature and measured `ioublood`. It was the most
+Well, for starters, I lied! I haven't always been {{< rb >}}nickelpro{{< /rb >}}, my first ever
+handle was the much more mature and measured {{< rb >}}ioublood{{< /rb >}}. It was the most
 intimidating thing my 10-year old mind could come up with back in 2004. That
 tag served as my _nom de guerre_ for pwning noobs on
 [Warcraft 3](https://en.wikipedia.org/wiki/Warcraft_III:_Reign_of_Chaos).
@@ -30,7 +30,7 @@ pictures!
 
 I mostly spent time hanging out in [IRC](https://en.wikipedia.org/wiki/Internet_Relay_Chat)
 channels run by much better hackers than me, but I had a small role in popularizing
-a couple hacks and if you Google "`ioublood`" today you'll find some cringey
+a couple hacks and if you Google "{{< rb >}}ioublood{{< /rb >}}" today you'll find some cringey
 posts of teenage me trying to pose as someone who knew a lot more than I actually
 did.
 
@@ -52,7 +52,7 @@ Nick Elliot Productions.
 
 NickEll Productions.
 
-`nickelpro`
+{{< rb >}}nickelpro{{< /rb >}}
 
 In 2007 when Gmail went public I registered the username on a whim. When I outgrew
-`ioublood`, `nickelpro` became my persona by default.
+{{< rb >}}ioublood{{< /rb >}}, {{< rb >}}nickelpro{{< /rb >}} became my persona by default.

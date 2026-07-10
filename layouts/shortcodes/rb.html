@@ -1,0 +1,15 @@
+{{ $inner := default "" .Inner | strings.TrimSpace }}
+{{ if not $inner }}
+  {{ errorf "rb shortcode requires inner content at %s" .Position }}
+{{ end }}
+{{ $color := "red" }}
+{{ with .Get 0 }}
+  {{ $color = lower (strings.TrimSpace .) }}
+{{ end }}
+{{ with .Get "color" }}
+  {{ $color = lower (strings.TrimSpace .) }}
+{{ end }}
+{{ if not (in (slice "red" "blue") $color) }}
+  {{ errorf "rb shortcode color must be one of red or blue at %s" .Position }}
+{{ end }}
+<span class="rubric rubric--{{ $color }}">{{ $inner | .Page.RenderString (dict "display" "inline") }}</span>

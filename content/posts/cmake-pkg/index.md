@@ -10,17 +10,17 @@ epigraph: "Pretty sure I just failed my Calc III final.<br>I hate calculus, but
 I love CMake. Let's talk about CMake."
 ---
 There is
-[a five year old `CMake` bug](https://gitlab.kitware.com/cmake/cmake/-/issues/17282)
+[a five year old {{< rb >}}CMake{{< /rb >}} bug](https://gitlab.kitware.com/cmake/cmake/-/issues/17282)
 describing the need for a "cookbook" to walk users through
-effective packaging of `CMake` projects. As with so many corners of `CMake`
+effective packaging of {{< rb >}}CMake{{< /rb >}} projects. As with so many corners of {{< rb >}}CMake{{< /rb >}}
 usage, the technical documentation extensively describes _how_ everything works,
-but gives no hints to _which_ components of the extensive `CMake` ecosystem
+but gives no hints to _which_ components of the extensive {{< rb >}}CMake{{< /rb >}} ecosystem
 should be used. Inevitably, projects end up cobbling together code copied from
 other sources and gently massaged into a "works for me" state.
 
 Due to other immense obstacles in the C/C++ package ecosystem, this has not been
 seen as the most pressing issue. However, with the rise of package managers like
-`conan` and especially `vcpkg` (which makes `CMake` central to its
+{{< rb >}}conan{{< /rb >}} and especially {{< rb >}}vcpkg{{< /rb >}} (which makes {{< rb >}}CMake{{< /rb >}} central to its
 architecture), ensuring that C/C++ libraries have functional packaging routines
 has grown in importance.
 
@@ -29,7 +29,7 @@ imgstyle="border-top-left-radius:50%; border-top-right-radius:50%" />}}
 
 Absent an official cookbook, widespread community consensus, a qualified expert,
 or well-liked town fool to provide guidance; I provide my dim, flickering
-advice for how to best take advantage of the `CMake` packaging facilities.
+advice for how to best take advantage of the {{< rb >}}CMake{{< /rb >}} packaging facilities.
 
 {{< collapse >}}
 Don't like reading? _Don't like me?_
@@ -67,7 +67,7 @@ products of the codebase placed into the install tree
 
 {{< collapse >}}
 "Target", I hear you say, "I know that one." Yep, packaging targets and
-"target-driven" modern `CMake` are closely related. If you're familiar with the
+"target-driven" modern {{< rb >}}CMake{{< /rb >}} are closely related. If you're familiar with the
 latter learning the former won't be so bad.
 
 Unfortunately, there is some friction between project-native targets and
@@ -77,7 +77,7 @@ Unfortunately, there is some friction between project-native targets and
 ## Packaging Starts at Home
 
 Before we get to packaging specific commands we need to briefly talk about how
-`CMake` targets interact with one another. Consider the library example from
+{{< rb >}}CMake{{< /rb >}} targets interact with one another. Consider the library example from
 **Figure 1**.
 
 {{< collapse label="Figure 1" >}}
@@ -127,7 +127,7 @@ resources will be used only by dependents of the associated target, and
 
 Let's talk about what files we need to produce:[^1]
 
-* **package-config-version.cmake:**[^2] The version file allows `CMake` to discover
+* **package-config-version.cmake:**[^2] The version file allows {{< rb >}}CMake{{< /rb >}} to discover
 version information without fully invoking or loading your package
 
 * **package-config.cmake:**[^3] The configuration file is responsible for loading
@@ -136,7 +136,7 @@ dependencies and making targets available to the current build session
 * **package.pc:** The package config file is the format understood by the
 venerable `pkg-config` program and serves as a pidgin used by build tools to
 talk to one another about dependencies. Package config is a bad format, but it's
-the least common denominator. If a consumer of your library doesn't use `CMake`
+the least common denominator. If a consumer of your library doesn't use {{< rb >}}CMake{{< /rb >}}
 they'll need this file.
 
 [^1]: **package** is a placeholder name in these examples
@@ -162,13 +162,13 @@ macro, which we'll use to generate the **package-config-version.cmake** file.
 {{< collapse >}}
 `CMakePackageConfigHelpers` provides one other macro,
 `configure_package_config_file`, which can be used to generate the
-**package-config.cmake** file. This macro supports an older style of `CMake`
+**package-config.cmake** file. This macro supports an older style of {{< rb >}}CMake{{< /rb >}}
 packaging which would `set()` variables with necessary package information. It
 ensures such variables are "relocatable", meaning they correctly point to
 wherever the install location happens to be rather than use a hardcoded path.
 
 We're not going to need this macro because we're not going to be "generating"
-the config file at all, and instead of variables we'll be using `CMake` targets
+the config file at all, and instead of variables we'll be using {{< rb >}}CMake{{< /rb >}} targets
 to communicate dependencies.
 {{< /collapse >}}
 
@@ -265,14 +265,14 @@ is orthogonal to a discussion of "packaging".
 
 My personal hot take: you shouldn't use `export()` under effectively any
 circumstances. It can lead only to confusion. The only valid example for
-`export()` given by the `CMake` docs is incredibly niche:
+`export()` given by the {{< rb >}}CMake{{< /rb >}} docs is incredibly niche:
 
 >  This is useful during cross-compiling to build utility executables that can
 > run on the host platform in one project and then import them into another
 > project being compiled for the target platform.
 
 Which I'm forced to concede is somewhat valid, but I've never seen `export()`
-used for this in the wild. I've only experienced it being misused. So my
+given by the {{< rb >}}CMake{{< /rb >}} docs used for this in the wild. I've only experienced it being misused. So my
 blanket advice is: just don't.
 
 {{< /collapse >}}
@@ -300,12 +300,12 @@ Oh ya, that's the stuff
 
 Alright, brace yourself for some overloaded terms. The first `install(TARGETS)`
 directive takes a list of one or more **targets** and associates them with what
-`CMake` calls an **export**. In **Figure 5** the export is named
+{{< rb >}}CMake{{< /rb >}} calls an **export**. In **Figure 5** the export is named
 `navidsonTargets`, which is a typical naming scheme.
 
 {{< img src="pump" darkmode="diff" imgstyle="border-radius:20%;" resize="x350 q90" style="shape-outside: margin-box; border-radius: 20%; width:30%; float: left; margin: 1rem 1rem 0 0;" />}}
 
-An **export** is a different _type_ than `CMake` variables or targets, but it
+An **export** is a different _type_ than {{< rb >}}CMake{{< /rb >}} variables or targets, but it
 works on a similar principle. In the same way _files_ get associated with
 targets, the `install(TARGETS)` directive associates targets with an export.
 And just like how we can call `target_sources` repeatedly to add files to a
@@ -358,7 +358,7 @@ the version file and we're done.
 Effectively zero projects I've look at do this in the "modern" way so I'd like
 to briefly address silly things you shouldn't be doing in the config file:
 
-* **Ad hoc include guards:** First off, `CMake` already has an `include_guard`
+* **Ad hoc include guards:** First off, {{< rb >}}CMake{{< /rb >}} already has an `include_guard`
 directive. Second off, they're unnecessary, the export targets already protect
 against double inclusion in a far more comprehensive fashion than you will come
 up with.
@@ -391,4 +391,4 @@ single `include()` of their export file.
 And that's it. Example repo is available [here](https://github.com/nickelpro/NavidsonExample).
 Example of using that example repo is [here](https://github.com/nickelpro/AshTreeExample),
 to prove I'm not a crank. I'm going to go be sad about Calculus III. If I fail
-it next semester too I'll write more about `CMake`.
+it next semester too I'll write more about {{< rb >}}CMake{{< /rb >}}.

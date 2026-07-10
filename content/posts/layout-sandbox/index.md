@@ -18,6 +18,7 @@ better chance of surviving later changes as well.{{< sn intro-note >}}
 {{< banner
   src="river.png"
   alt="River test banner"
+  darkmode="img-fill"
   width="80%"
 />}}
 
@@ -54,9 +55,10 @@ and dark-mode image swapping.
 ## Section With Ordinary Prose
 
 There should be enough ordinary prose to make the page feel like an actual post.
-That means headings, emphasized phrases, a few inline code fragments like
-`std::execution`, and at least one list whose spacing can go wrong in obvious
-ways.
+That means headings, emphasized phrases, a few rubricated lead-ins like
+{{< rb >}}nota{{< /rb >}} and {{< rb blue >}}responsio{{< /rb >}}, a few inline
+code fragments like `std::execution`, and at least one list whose spacing can
+go wrong in obvious ways.
 
 * The first item exists to check list indentation and vertical rhythm.
 * The second exists to make sure emphasized text, links, and punctuation still

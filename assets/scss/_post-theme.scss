@@ -1,9 +1,20 @@
 $monospace: 'Source Code Pro';
 $code-red: rgb(177, 0, 35);
 $code-dark: #c20a0a;
+$rubric-blue: #204a87;
+$rubric-red-dark: #d96a65;
+$rubric-blue-dark: #7ea6e1;
 
 .dark-mode .dark-img-fill {
   background: #8d762c;
+}
+
+.dark-mode .rubric--red {
+  color: $rubric-red-dark;
+}
+
+.dark-mode .rubric--blue {
+  color: $rubric-blue-dark;
 }
 
 .dark-mode .epigraph {
@@ -51,6 +62,20 @@ h6 {
 .dark-mode :is(p, a, li)>code {
   color: $code-dark;
   font-family: $monospace;
+}
+
+.rubric {
+  font-family: inherit;
+  font-size: 1.06em;
+  line-height: inherit;
+}
+
+.rubric--red {
+  color: $code-red;
+}
+
+.rubric--blue {
+  color: $rubric-blue;
 }
 
 .dark-mode .dark-diff {

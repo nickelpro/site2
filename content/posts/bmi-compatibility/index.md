@@ -188,39 +188,39 @@ mavericks and brand-new build systems which claim the same:
 [cppbuild](https://codeberg.org/mccakit/cppbuild). I'll be using the
 latest-at-time-of-writing trunk for each.[^6]
 
-[^5]: Please debate in your forum of choice if `build2` is a maverick or a major
+[^5]: Please debate in your forum of choice if {{< rb >}}build2{{< /rb >}} is a maverick or a major
 build system.
 
-[^6]: Tested under `GCC 16.1` and `Clang 22.1`, for all systems except
-`cppbuild` which documents only `Clang` support.
+[^6]: Tested under {{< rb >}}GCC 16.1{{< /rb >}} and {{< rb >}}Clang 22.1{{< /rb >}}, for all systems except
+{{< rb >}}cppbuild{{< /rb >}} which documents only {{< rb >}}Clang{{< /rb >}} support.
 
 The complete code [is available here.](https://github.com/nickelpro/bmi-compatibility-tests)
 
 ## The Quixotic Attempts
 
 Unsurprisingly, all the mavericks and newcomers failed the test, being unable to
-produce a successful build. Surprisingly, so did `Bazel`, and it fails _hard_.
-`Bazel`'s module support is experimental, so this isn't a slight against it.
-We'll dispatch with analyzing the others first and then come back to `Bazel`.
+produce a successful build. Surprisingly, so did {{< rb >}}Bazel{{< /rb >}}, and it fails _hard_.
+{{< rb >}}Bazel{{< /rb >}}'s module support is experimental, so this isn't a slight against it.
+We'll dispatch with analyzing the others first and then come back to {{< rb >}}Bazel{{< /rb >}}.
 
-`build2` was an expected failure. It's known not to support BMI compatibility
+{{< rb >}}build2{{< /rb >}} was an expected failure. It's known not to support BMI compatibility
 and [has a comment where the BMI compatibility check would go noting this.](https://github.com/build2/build2/blob/708bfbc1df971339452a73194f7261ef2364d3fd/libbuild2/cc/compile-rule.cxx#L5984-L5987)
 While I would like to see this pothole more clearly sign-posted in the
 documentation (rather than being arcana for build engineers who read
 implementation code), there's nothing wrong with `TODO`-based implementation.
 
-`Qbs`'s module support is documented as experimental, so no harm in failing.
+{{< rb >}}Qbs{{< /rb >}}'s module support is documented as experimental, so no harm in failing.
 The only differentiator being I can't find any infrastructure in the code where
 compatibility would even be implemented, no stubs, no `TODO`s.
 
-`pcons` is so new it still has the new-build-system-smell. It is the only
+{{< rb >}}pcons{{< /rb >}} is so new it still has the new-build-system-smell. It is the only
 candidate which is openly vibe-coded. If you're wondering if AI can save you
-from BMI-compatibility, the answer is No. Like `Qbs`, there doesn't appear to
-be any notion of compatibility at all.[^7] `pcons` is also the only system
+from BMI-compatibility, the answer is No. Like {{< rb >}}Qbs{{< /rb >}}, there doesn't appear to
+be any notion of compatibility at all.[^7] {{< rb >}}pcons{{< /rb >}} is also the only system
 considered which performs collation only once at configure time,[^8] but it's
 brand new so we'll forgive it.
 
-[^7]: This was my first time using `pcons` and I learned it has the unfortunate
+[^7]: This was my first time using {{< rb >}}pcons{{< /rb >}} and I learned it has the unfortunate
 behavior of assuming if the same source file appears in multiple targets, it can
 reuse the resulting object file. This is obviously wrong, as I may have compiled
 it under different flags.\
@@ -228,13 +228,13 @@ it under different flags.\
 If the author happens to read this: Hey, don't do that. It's a bad habit.
 
 [^8]: Meaning we can break the build by editing existing files to a different
-valid shape then rerunning `Ninja`. This is pretty catastrophic by build system
+valid shape then rerunning {{< rb >}}Ninja{{< /rb >}}. This is pretty catastrophic by build system
 standards. It leads to "just nuke the build folder and it starts working for
 some reason" bugs.
 
-Calling `cppbuild` _new_ would be unfair, new implies complete, it's
+Calling {{< rb >}}cppbuild{{< /rb >}} _new_ would be unfair, new implies complete, it's
 under construction. However the author has been dragging modules work forward by
-pushing for the libraries `cppbuild` relies on to provide module units, so it
+pushing for the libraries {{< rb >}}cppbuild{{< /rb >}} relies on to provide module units, so it
 gets a shout out. Unfortunately it doesn't handle BMI compatibility yet, but
 I'm sure it will soon.
 
@@ -244,7 +244,7 @@ I'm sure it will soon.
   darkmode="img-fill"
 >}}
 
-So, `Bazel`. Again, module support is experimental which means there's no
+So, {{< rb >}}Bazel{{< /rb >}}. Again, module support is experimental which means there's no
 commitment to this stuff working. It fails the BMI compatibility test, but the
 bigger problem is _it doesn't even support GCC_. [This is due to a broken
 template in `rules_cc`](https://github.com/bazelbuild/rules_cc/blob/72430b92dbb20279638ead93cbdc662a64ad5e4f/cc/private/toolchain/gcc_deps_scanner_wrapper.sh.tpl)
@@ -254,15 +254,17 @@ path it wants, and writes the dependency file output to a temp file which is
 discarded.
 
 This is a trivial-to-fix bug, but it means no one is testing Bazel's module
-support on GCC. This thing breaks on `Hello World`. Comprehensive testing of
-modules support is absolutely essential for production build systems, so there
-remains work to be done before moving out of experimental.
+support on GCC. This thing breaks on {{< rb  blue>}}Hello World{{< /rb >}}.
+Comprehensive testing of modules support is absolutely essential for production
+build systems, so there remains work to be done before moving out of
+experimental.
 
 ## The Victors?
 
-`CMake` and `Xmake` both produce successful builds for the test, but neither
-passes on all the listed criteria. `CMake` rebuilds the BMI for every single
-consumer, and `Xmake` rebuilds the BMI for each incompatible consumer. This
+{{< rb >}}CMake{{< /rb >}} and {{< rb >}}Xmake{{< /rb >}} both produce
+successful builds for the test, but neither passes on all the listed criteria.
+{{< rb >}}CMake{{< /rb >}} rebuilds the BMI for every single consumer, and
+{{< rb >}}Xmake{{< /rb >}} rebuilds the BMI for each incompatible consumer. This
 is more work than needs to be done.
 
 {{<
@@ -271,22 +273,22 @@ is more work than needs to be done.
   darkmode="img-fill"
 >}}
 
-`CMake`'s behavior is due to [a stubbed out calculation for BMI compatibility](https://gitlab.kitware.com/cmake/cmake/-/blob/936afa9823c9a592ba9406236dd95dbfe1179a10/Source/cmCxxModuleUsageEffects.cxx#L11-14)
+{{< rb >}}CMake{{< /rb >}}'s behavior is due to [a stubbed out calculation for BMI compatibility](https://gitlab.kitware.com/cmake/cmake/-/blob/936afa9823c9a592ba9406236dd95dbfe1179a10/Source/cmCxxModuleUsageEffects.cxx#L11-14)
 which uses the consumer's name as a compatibility hash instead of anything
 having to do with standard versions or flags. This is fixed [in a pending MR
-for `CMake` 4.4](https://gitlab.kitware.com/cmake/cmake/-/merge_requests/12116)
-and with that MR applied `CMake` passes on all criteria.[^9]
+for {{< rb >}}CMake 4.4{{< /rb >}}](https://gitlab.kitware.com/cmake/cmake/-/merge_requests/12116)
+and with that MR applied {{< rb >}}CMake{{< /rb >}} passes on all criteria.[^9]
 
 [^9]: Full disclosure, it's my MR.
 
-`Xmake` doesn't maintain a cache of available BMIs the way `CMake` does, each
+{{< rb >}}Xmake{{< /rb >}} doesn't maintain a cache of available BMIs the way {{< rb >}}CMake{{< /rb >}} does, each
 consumer asks a binary question: [Is this consumer compatible with the provider?](https://github.com/xmake-io/xmake/blob/c2dd4195391125636743b9ebb70a794349a6f7ce/xmake/rules/c%2B%2B/modules/scanner.lua#L385-L405)
-If not, the BMI is rebuilt by the consumer asking the question. `Xmake` also
+If not, the BMI is rebuilt by the consumer asking the question. {{< rb >}}Xmake{{< /rb >}} also
 doesn't reuse scans, each target scans and collates its entire graph. This is
 simple and easy to debug, but wasteful. Rescanning behavior is unique to
-`Xmake`, none of the other build systems considered rescan module units.
+{{< rb >}}Xmake{{< /rb >}}, none of the other build systems considered rescan module units.
 
-Another interesting behavior of `Xmake` is the `discriminate_on_defines` policy.
+Another interesting behavior of {{< rb >}}Xmake{{< /rb >}} is the `discriminate_on_defines` policy.
 This policy determines if definition flags are considered for the purposes of
 BMI compatibility calculation. This is something of a strange question, what
 does it matter if the provider and consumer have different compile definitions?
@@ -339,27 +341,27 @@ consumer, and which flags remain the same?
 
 Our two victors disagree on the answer:
 
-* `Xmake` swaps out flags wholesale when BMIs are incompatible. All includes,
+* {{< rb >}}Xmake{{< /rb >}} swaps out flags wholesale when BMIs are incompatible. All includes,
 all compile definitions, all compile options, everything. This is why it cares
 about compile definitions for the purpose of BMI compatibility.
 
-* `CMake` swaps out compile options and language features,[^11] but keeps
+* {{< rb >}}CMake{{< /rb >}} swaps out compile options and language features,[^11] but keeps
 includes and definitions as they were in the provider.
 
-[^11]: `CMake`-speak for the language version standard.
+[^11]: {{< rb >}}CMake{{< /rb >}}-speak for the language version standard.
 
-So the above example builds fine on `CMake`, and fails on `Xmake`. However,
-`Xmake` isn't wrong, they had a motivated reason for this behavior: shared
-library exports. [The `Xmake` bug covering this issue](https://github.com/xmake-io/xmake/issues/7436)
+So the above example builds fine on {{< rb >}}CMake{{< /rb >}}, and fails on {{< rb >}}Xmake{{< /rb >}}. However,
+{{< rb >}}Xmake{{< /rb >}} isn't wrong, they had a motivated reason for this behavior: shared
+library exports. [The {{< rb >}}Xmake{{< /rb >}} bug covering this issue](https://github.com/xmake-io/xmake/issues/7436)
 explicitly uses changing the compile definitions between the provider and
 consumer as a way to control symbol visibility, and they manifest "changing"
 by not propagating private includes and definitions to the consumer's rebuild
 of the BMI.
 
-[The `CMake` bug covering the same issue](https://gitlab.kitware.com/cmake/cmake/-/work_items/25539)
-is unresolved, and currently unsolvable within `CMake` outside truly heinous
+[The {{< rb >}}CMake{{< /rb >}} bug covering the same issue](https://gitlab.kitware.com/cmake/cmake/-/work_items/25539)
+is unresolved, and currently unsolvable within {{< rb >}}CMake{{< /rb >}} outside truly heinous
 hacks like compile defintion smuggling. Personally, I believe a dedicated
-mechanism for this problem is better than `Xmake`'s "solution" of failing to
+mechanism for this problem is better than {{< rb >}}Xmake{{< /rb >}}'s "solution" of failing to
 rebuild BMIs with private headers.[^12]
 
 [^12]: I should note here, this fully precludes "everything builds under the
