@@ -1,0 +1,22 @@
+{{ $inner := default "" .Inner | strings.TrimSpace }}
+{{ $style := "" }}
+{{ with .Get "width" }}
+  {{ $width := strings.TrimSpace . }}
+  {{ if findRE `^\d+(?:\.\d+)?%?$` $width }}
+    {{ $style = printf "--banner-width-percent: %s;" (replaceRE `%$` "" $width) }}
+  {{ else }}
+    {{ errorf "banner shortcode width must be a percentage like \"75%%\" at %s" $.Position }}
+  {{ end }}
+{{ end }}
+<figure class="full-banner"{{ if $style }} {{ printf "style=%q" $style | safeHTMLAttr }}{{ end }}>
+  {{ partial "image.html" (dict "ctx" . "wrapper" "bare") }}
+  {{ if or $inner (.Get "caption") }}
+  <figcaption>
+    {{ if $inner }}
+      {{ $inner | markdownify }}
+    {{ else }}
+      {{ .Get "caption" | markdownify }}
+    {{ end }}
+  </figcaption>
+  {{ end }}
+</figure>

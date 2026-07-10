@@ -1,5 +1,33 @@
 {{ define "main" }}
+  {{ $page := . }}
   {{ .Scratch.Set "tufteNotes" (slice) }}
+  {{ .Scratch.Set "tufteNoteDefinitions" (dict) }}
+  {{ range findRE `(?s)\{\{<\s*sidenote\s+[^>]*\bident\s*=\s*(?:"[^"]+"|[^\s>]+)[^>]*>\}\}.*?\{\{<\s*/sidenote\s*>\}\}` .RawContent }}
+    {{ $block := . }}
+    {{ $identToken := index (findRE `\bident\s*=\s*(?:"[^"]+"|[^\s>]+)` $block 1) 0 }}
+    {{ $ident := replaceRE `^ident\s*=\s*"?([^"]+)"?$` `$1` $identToken }}
+    {{ $side := "right" }}
+    {{ $sideTokens := findRE `\bside\s*=\s*(?:"[^"]+"|[^\s>]+)` $block 1 }}
+    {{ if gt (len $sideTokens) 0 }}
+      {{ $sideCandidate := lower (replaceRE `^side\s*=\s*"?([^"]+)"?$` `$1` (index $sideTokens 0)) }}
+      {{ if or (eq $sideCandidate "left") (eq $sideCandidate "right") }}
+        {{ $side = $sideCandidate }}
+      {{ end }}
+    {{ end }}
+    {{ $marginable := true }}
+    {{ $marginableTokens := findRE `\bmarginable\s*=\s*(?:"[^"]+"|[^\s>]+)` $block 1 }}
+    {{ if gt (len $marginableTokens) 0 }}
+      {{ $marginableCandidate := lower (replaceRE `^marginable\s*=\s*"?([^"]+)"?$` `$1` (index $marginableTokens 0)) }}
+      {{ if eq $marginableCandidate "false" }}
+        {{ $marginable = false }}
+      {{ end }}
+    {{ end }}
+    {{ $body := replaceRE `(?s)\{\{<\s*sidenote[^>]*>\}\}(.*)\{\{<\s*/sidenote\s*>\}\}` `$1` $block | strings.TrimSpace }}
+    {{ if index ($page.Scratch.Get "tufteNoteDefinitions") $ident }}
+      {{ warnf "Duplicate sidenote definition %q in %s; later definition wins." $ident $page.File.Path }}
+    {{ end }}
+    {{ $page.Scratch.SetInMap "tufteNoteDefinitions" $ident (dict "body" $body "side" $side "marginable" $marginable) }}
+  {{ end }}
   {{ $content := .Content }}
   {{ $tufteNotes := .Scratch.Get "tufteNotes" | default (slice) }}
   {{ $hasTufteNotes := gt (len $tufteNotes) 0 }}

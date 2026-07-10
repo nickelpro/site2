@@ -1,7 +1,13 @@
 {{ $page := .page }}
 {{ $marginable := .marginable }}
 {{ $side := .side | default "right" }}
-{{ $inner := .inner | strings.TrimSpace }}
+{{ $source := "" }}
+{{ with .body }}
+  {{ $source = . }}
+{{ else }}
+  {{ $source = .inner }}
+{{ end }}
+{{ $inner := $source | strings.TrimSpace }}
 {{ $notes := $page.Scratch.Get "tufteNotes" | default (slice) }}
 {{ $number := add (len $notes) 1 }}
 {{ $inlineBody := $inner | $page.RenderString (dict "display" "inline") }}

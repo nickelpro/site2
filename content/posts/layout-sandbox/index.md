@@ -13,15 +13,21 @@ draft: true
 This is not a real essay. It is a deliberately over-equipped draft whose only
 job is to hold together while we move the walls around it. If the spacing,
 type, images, notes, and collapses all survive here, the real posts have a much
-better chance of surviving later changes as well.{{< sidenote >}}This draft uses
-the shortcode-driven note system, so it can exercise desktop margin notes
-without requiring any changes to the older posts that still rely on Goldmark
-footnotes.{{< /sidenote >}}
+better chance of surviving later changes as well.{{< sn intro-note >}}
+
+{{< banner
+  src="river.png"
+  alt="River test banner"
+  width="80%"
+/>}}
 
 The content is intentionally mixed. Some paragraphs are short, some a little
 denser, and some exist only so there is enough text for a floating or centered
-figure to push against. The images are borrowed from older posts because the
-stylistic behavior matters here more than the informational content.
+figure to push against.{{< sidenote side=left >}}This one uses the direct inline
+`sidenote` form, so the sandbox now exercises both shortcode authoring styles
+in the same post.{{< /sidenote >}} The images are borrowed from older posts
+because the stylistic behavior matters here more than the informational
+content.
 
 {{< marginalia side="right" >}}
 <svg viewBox="0 0 180 236" xmlns="http://www.w3.org/2000/svg" fill="none">
@@ -62,9 +68,7 @@ ways.
 > boundaries.
 
 There should also be a code block, because code almost always reveals whether a
-layout is merely attractive or actually usable.{{< note >}}This note is
-deliberately not marginable, so the page still exercises the endnote section on
-wide screens as well as mobile ones.{{< /note >}}
+layout is merely attractive or actually usable.{{< sn endnote-demo >}}
 
 ```cpp
 struct LayoutProbe {
@@ -106,6 +110,20 @@ and close interaction all keep their shape when the surrounding layout changes.
 
 One more paragraph after the collapse keeps the bottom of the article from being
 all ornament and no text. That gives us a better sense of final spacing,
-especially around the last heading and any notes that follow.{{< sidenote
-side="left" >}}This one explicitly requests the left margin so the layout can
-exercise both sides of the page on sufficiently wide screens.{{< /sidenote >}}
+especially around the last heading and any notes that follow.{{< sn left-note >}}
+
+{{< sidenote ident="intro-note" >}}
+This draft uses the shortcode-driven note system, so it can exercise desktop
+margin notes without requiring any changes to the older posts that still rely
+on Goldmark footnotes.
+{{< /sidenote >}}
+
+{{< sidenote ident="endnote-demo" marginable=false >}}
+This note is deliberately not marginable, so the page still exercises the
+endnote section on wide screens as well as mobile ones.
+{{< /sidenote >}}
+
+{{< sidenote ident="left-note" side="left" >}}
+This one explicitly requests the left margin so the layout can exercise both
+sides of the page on sufficiently wide screens.
+{{< /sidenote >}}

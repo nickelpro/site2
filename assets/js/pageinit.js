@@ -4,7 +4,18 @@ function setSrcToAttr(dataname) {
   }
 }
 
+function setViewportVars() {
+  const docEl = document.documentElement;
+  const viewportWidth = docEl.clientWidth;
+  const contentColumn = document.querySelector('article.post') || document.querySelector('.container');
+  const contentColumnWidth = contentColumn ? contentColumn.clientWidth : viewportWidth;
+
+  docEl.style.setProperty('--viewport-width', `${viewportWidth}px`);
+  docEl.style.setProperty('--content-column-width', `${contentColumnWidth}px`);
+}
+
 window.addEventListener('DOMContentLoaded', () => {
+  setViewportVars();
   const dark = localStorage.getItem('dark-mode');
   if (dark == null) {
     localStorage.setItem('dark-mode', 'false');
@@ -20,3 +31,5 @@ window.addEventListener('DOMContentLoaded', () => {
     document.body.style.transition = 'background-color 1s'
   });
 });
+
+window.addEventListener('resize', setViewportVars);

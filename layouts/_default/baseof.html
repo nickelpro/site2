@@ -96,6 +96,6 @@
       {{ block "main" . }}{{ end }}
       {{ partial "blog_footer.html" . }}
     </div>
-    <script>{{ (resources.Get "js/darkmode.js" | minify).Content | safeJS }}</script>
+    <script>{{ (resources.Get "js/pageinit.js" | minify).Content | safeJS }}</script>
   </body>
 </html>
