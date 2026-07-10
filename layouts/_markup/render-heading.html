@@ -1,0 +1,2 @@
+{{- $tag := printf "h%d" .Level -}}
+{{- printf `<%s id="%s"><a class="heading-link" href="#%s"><span class="heading-anchor" aria-hidden="true">¶</span>%s</a></%s>` $tag .Anchor .Anchor (.Text | safeHTML) $tag | safeHTML -}}

@@ -1,4 +1,16 @@
 {{ define "main" }}
+  {{ .Scratch.Set "tufteNotes" (slice) }}
+  {{ $content := .Content }}
+  {{ $tufteNotes := .Scratch.Get "tufteNotes" | default (slice) }}
+  {{ $hasTufteNotes := gt (len $tufteNotes) 0 }}
+  {{ $renderedContent := $content }}
+  {{ if $hasTufteNotes }}
+    {{ if gt (len (findRE `class="footnote-ref"` $content)) 0 }}
+      {{ warnf "Post %q mixes shortcode-driven notes with markdown footnotes; goldmark footnotes will be suppressed." .File.Path }}
+    {{ end }}
+    {{ $renderedContent = replaceRE `(?s)<div class="footnotes"[^>]*>.*?</div>\s*$` "" $content }}
+  {{ end }}
+  {{ $nonMarginNotes := where $tufteNotes "marginable" false }}
   <header class="page-header">
     <nav class="site-nav">
       <a href="{{ .Site.BaseURL }}">Index</a>
@@ -7,7 +19,7 @@
     <svg class="light-toggle" onclick="darkToggle()" viewBox="0 0 200 200">{{ (resources.Get "svg/sun.svg" | minify).Content | safeHTML }}</svg>
     <time class="post-date" datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "02 Jan 2006" }}</time>
   </header>
-  <article class="post">
+  <article class="post{{ if $hasTufteNotes }} post--tufte-notes{{ end }}">
     <header class="post-header">
       {{ if isset .Params "display" }}
       <h1 class="post-title">{{ .Params.display | safeHTML }}</h1>
@@ -35,6 +47,18 @@
       {{ end }}
       {{ end }}
     </header>
-    {{ .Content }}
+    {{ $renderedContent | safeHTML }}
+    {{ if $hasTufteNotes }}
+    <div class="footnotes tufte-endnotes{{ if eq (len $nonMarginNotes) 0 }} tufte-endnotes--mobile-only{{ end }}" role="doc-endnotes">
+      <hr>
+      <ol>
+        {{ range $tufteNotes }}
+        <li id="tufte-note-{{ .number }}" class="tufte-endnote{{ if .marginable }} tufte-endnote--marginable{{ end }}" role="doc-endnote" value="{{ .number }}">
+          {{ .endnoteBody }}
+        </li>
+        {{ end }}
+      </ol>
+    </div>
+    {{ end }}
   </article>
 {{ end }}

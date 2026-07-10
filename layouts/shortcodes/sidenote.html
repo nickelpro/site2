@@ -1,0 +1,5 @@
+{{ $side := lower (or (.Get "side") "right") }}
+{{ if and (ne $side "left") (ne $side "right") }}
+	{{ $side = "right" }}
+{{ end }}
+{{ partial "tufte_note.html" (dict "page" .Page "inner" .Inner "marginable" true "side" $side) }}

@@ -1,0 +1,27 @@
+{{ $page := .page }}
+{{ $marginable := .marginable }}
+{{ $side := .side | default "right" }}
+{{ $inner := .inner | strings.TrimSpace }}
+{{ $notes := $page.Scratch.Get "tufteNotes" | default (slice) }}
+{{ $number := add (len $notes) 1 }}
+{{ $inlineBody := $inner | $page.RenderString (dict "display" "inline") }}
+{{ $blockBody := $inner | $page.RenderString (dict "display" "block") }}
+{{ $backref := printf `<a class="tufte-endnote__backref" href="#tufte-ref-%d" role="doc-backlink">↩</a>` $number }}
+{{ $endnoteBody := printf `%s %s` $blockBody $backref | safeHTML }}
+{{ if gt (len (findRE `</p>\s*$` $blockBody)) 0 }}
+  {{ $endnoteBody = replaceRE `</p>\s*$` (printf ` %s</p>` $backref) $blockBody | safeHTML }}
+{{ end }}
+{{ $note := dict
+  "number" $number
+  "marginable" $marginable
+  "side" $side
+  "blockBody" $blockBody
+  "endnoteBody" $endnoteBody
+}}
+{{ $page.Scratch.Add "tufteNotes" (slice $note) }}
+<span class="tufte-note{{ if $marginable }} tufte-note--marginable tufte-note--{{ $side }}{{ else }} tufte-note--endnote{{ end }}">
+  <sup id="tufte-ref-{{ $number }}"><a class="tufte-note-ref" href="#tufte-note-{{ $number }}" role="doc-noteref">{{ $number }}</a></sup>
+  {{ if $marginable }}
+  <span class="tufte-sidenote tufte-sidenote--{{ $side }}"><span class="tufte-sidenote__number">{{ $number }}.</span>{{ $inlineBody }}</span>
+  {{ end }}
+</span>

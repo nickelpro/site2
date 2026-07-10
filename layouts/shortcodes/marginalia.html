@@ -1,0 +1,14 @@
+{{ $side := lower (or (.Get "side") "right") }}
+{{ if and (ne $side "left") (ne $side "right") }}
+  {{ $side = "right" }}
+{{ end }}
+{{ $inner := .Inner | strings.TrimSpace }}
+<aside class="tufte-marginalia tufte-marginalia--{{ $side }}" aria-hidden="true">
+  {{ if .Get "src" }}
+    {{ partial "image.html" (dict "ctx" . "wrapper" "figure" "inner" $inner) }}
+  {{ else if $inner }}
+    <div class="tufte-marginalia__body">
+      {{ $inner | .Page.RenderString (dict "display" "block") }}
+    </div>
+  {{ end }}
+</aside>
