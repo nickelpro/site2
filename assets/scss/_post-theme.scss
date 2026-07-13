@@ -1,7 +1,7 @@
 $monospace: 'Source Code Pro';
 $code-red: rgb(177, 0, 35);
 $code-dark: #c20a0a;
-$rubric-blue: #204a87;
+$rubric-blue: #1a4587;
 $rubric-red-dark: #d96a65;
 $rubric-blue-dark: #7ea6e1;
 
@@ -59,7 +59,7 @@ h6 {
 
 @include shell-dark-mode;
 
-.dark-mode :is(p, a, li)>code {
+.dark-mode :is(p, a, li, .tufte-sidenote__lead, .tufte-sidenote__paragraph)>code {
   color: $code-dark;
   font-family: $monospace;
 }

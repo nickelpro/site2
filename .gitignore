@@ -5,3 +5,9 @@ sync.sh
 .hugo_build.lock
 *.pdf
 *.zip
+.venv
+__pycache__
+trace_sweep/out/*
+trace_sweep/*.png
+trace_sweep/trace_sweep.egg-info
+uv.lock

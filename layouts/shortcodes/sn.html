@@ -1,19 +1,19 @@
-{{ $ident := "" }}
-{{ if .IsNamedParams }}
-  {{ $ident = .Get "ident" }}
-{{ else }}
-  {{ $ident = .Get 0 }}
-{{ end }}
-{{ if not $ident }}
-  {{ errorf "sn shortcode requires an ident in %s" .Page.File.Path }}
-{{ end }}
-{{ $definition := index (.Page.Scratch.Get "tufteNoteDefinitions") $ident }}
-{{ if not $definition }}
-  {{ errorf "sn shortcode could not find sidenote definition %q in %s" $ident .Page.File.Path }}
-{{ end }}
-{{ partial "tufte_note.html" (dict
+{{- $ident := "" -}}
+{{- if .IsNamedParams -}}
+  {{- $ident = .Get "ident" -}}
+{{- else -}}
+  {{- $ident = .Get 0 -}}
+{{- end -}}
+{{- if not $ident -}}
+  {{- errorf "sn shortcode requires an ident in %s" .Page.File.Path -}}
+{{- end -}}
+{{- $definition := index (.Page.Scratch.Get "tufteNoteDefinitions") $ident -}}
+{{- if not $definition -}}
+  {{- errorf "sn shortcode could not find sidenote definition %q in %s" $ident .Page.File.Path -}}
+{{- end -}}
+{{- partial "tufte_note.html" (dict
   "page" .Page
   "body" (index $definition "body")
   "marginable" (index $definition "marginable")
   "side" (index $definition "side")
-) }}
+) -}}

@@ -14,6 +14,30 @@ function setViewportVars() {
   docEl.style.setProperty('--content-column-width', `${contentColumnWidth}px`);
 }
 
+function syncMarginableNoteHashTarget() {
+  const match = window.location.hash.match(/^#tufte-note-(\d+)$/);
+  if (!match) {
+    return;
+  }
+
+  const noteNumber = match[1];
+  const endnoteTarget = document.getElementById(`tufte-note-${noteNumber}`);
+  if (!endnoteTarget || !endnoteTarget.classList.contains('tufte-endnote--marginable')) {
+    return;
+  }
+
+  if (endnoteTarget.getClientRects().length > 0) {
+    return;
+  }
+
+  const referenceTarget = document.getElementById(`tufte-ref-${noteNumber}`);
+  if (!referenceTarget) {
+    return;
+  }
+
+  referenceTarget.scrollIntoView({ block: 'start' });
+}
+
 window.addEventListener('DOMContentLoaded', () => {
   setViewportVars();
   const dark = localStorage.getItem('dark-mode');
@@ -27,9 +51,11 @@ window.addEventListener('DOMContentLoaded', () => {
   document.body.style.visibility = 'visible';
   document.body.style.opacity = 1;
   window.requestAnimationFrame(() => {
+    syncMarginableNoteHashTarget();
     document.body.style.transition = 'color 1s';
-    document.body.style.transition = 'background-color 1s'
+    document.body.style.transition = 'background-color 1s';
   });
 });
 
 window.addEventListener('resize', setViewportVars);
+window.addEventListener('hashchange', syncMarginableNoteHashTarget);

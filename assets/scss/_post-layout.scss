@@ -9,7 +9,7 @@
   margin-bottom: 1.5rem;
 }
 
-$sidenote-break: 86rem;
+$sidenote-break: 90rem;
 
 .site-nav a::before {
   content: '\2190';
@@ -215,16 +215,26 @@ article>p:first-of-type::first-letter {
     }
   }
 
+  .tufte-sidenote__lead,
+  .tufte-sidenote__paragraph {
+    display: block;
+    margin: 0 0 0.75rem;
+
+    &> :last-child {
+      margin-bottom: 0;
+    }
+  }
+
   .tufte-sidenote--right {
     float: right;
     clear: right;
-    margin: 0.35rem -17rem 1rem 1rem;
+    margin: 0.35rem -18rem 1rem 1rem;
   }
 
   .tufte-sidenote--left {
     float: left;
     clear: left;
-    margin: 0.35rem 1rem 1rem -17rem;
+    margin: 0.35rem 1rem 1rem -20rem;
   }
 
   .tufte-marginalia {
@@ -302,7 +312,7 @@ pre {
   border-radius: 1rem;
 }
 
-:is(p, a, li)>code {
+:is(p, a, li, .tufte-sidenote__lead, .tufte-sidenote__paragraph)>code {
   color: $code-red;
   font-family: $monospace;
 }

@@ -26,7 +26,10 @@ The content is intentionally mixed. Some paragraphs are short, some a little
 denser, and some exist only so there is enough text for a floating or centered
 figure to push against.{{< sidenote side=left >}}This one uses the direct inline
 `sidenote` form, so the sandbox now exercises both shortcode authoring styles
-in the same post.{{< /sidenote >}} The images are borrowed from older posts
+in the same post.
+
+This second paragraph exists specifically to test whether blank-line-separated
+margin note prose stays visibly separated in the desktop sidebar.{{< /sidenote >}} The images are borrowed from older posts
 because the stylistic behavior matters here more than the informational
 content.
 
@@ -59,6 +62,11 @@ That means headings, emphasized phrases, a few rubricated lead-ins like
 {{< rb >}}nota{{< /rb >}} and {{< rb blue >}}responsio{{< /rb >}}, a few inline
 code fragments like `std::execution`, and at least one list whose spacing can
 go wrong in obvious ways.
+
+This sentence places a direct sidenote before punctuation{{< sidenote >}}The
+comma after this note should sit flush against the note marker in the main text,
+while the margin note itself remains unaffected.{{< /sidenote >}}, and this one
+does the same for the deferred form{{< sn punct-note >}}.
 
 * The first item exists to check list indentation and vertical rhythm.
 * The second exists to make sure emphasized text, links, and punctuation still
@@ -118,6 +126,9 @@ especially around the last heading and any notes that follow.{{< sn left-note >}
 This draft uses the shortcode-driven note system, so it can exercise desktop
 margin notes without requiring any changes to the older posts that still rely
 on Goldmark footnotes.
+
+It also tests the deferred-definition path for multiline sidenotes, so both
+authoring styles exercise paragraph breaks in the margin.
 {{< /sidenote >}}
 
 {{< sidenote ident="endnote-demo" marginable=false >}}
@@ -128,4 +139,9 @@ endnote section on wide screens as well as mobile ones.
 {{< sidenote ident="left-note" side="left" >}}
 This one explicitly requests the left margin so the layout can exercise both
 sides of the page on sufficiently wide screens.
+{{< /sidenote >}}
+
+{{< sidenote ident="punct-note" >}}
+This deferred note exists only to test punctuation immediately following the
+inline note marker.
 {{< /sidenote >}}
