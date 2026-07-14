@@ -202,8 +202,9 @@ code {
 }
 
 .container {
+  --content-column-max-width: 38rem;
   width: 100%;
-  max-width: 38rem;
+  max-width: var(--content-column-max-width);
   margin: 0 auto;
   padding: .5rem;
 

@@ -29,28 +29,42 @@
   {{- $tableClasses = $tableClasses | append "tabula--ornamented" -}}
 {{- end -}}
 
-{{- $style := "" -}}
+{{- $styleParts := slice -}}
+{{- $tabulaWidthPattern := `^\d+(?:\.\d+)?(?:rem|em|ch|px|%)$` -}}
+{{- $tabulaAbsoluteWidthPattern := `^\d+(?:\.\d+)?(?:rem|em|ch|px)$` -}}
+{{- $tabulaPercentWidthPattern := `^\d+(?:\.\d+)?%$` -}}
 {{- with .Get "minwidth" -}}
   {{- $minwidth := strings.TrimSpace . -}}
-  {{- if findRE `^\d+(?:\.\d+)?(?:rem|em|ch|px)$` $minwidth -}}
-    {{- $style = printf `--tabula-min-width: %s;` $minwidth -}}
+  {{- if findRE $tabulaWidthPattern $minwidth -}}
+    {{- $styleParts = $styleParts | append (printf `--tabula-min-width: %s;` $minwidth) -}}
   {{- else -}}
-    {{- errorf "tabula minwidth must look like 42rem, 60ch, or 720px at %s" $.Position -}}
+    {{- errorf "tabula minwidth must look like 80%%, 42rem, 60ch, or 720px at %s" $.Position -}}
   {{- end -}}
 {{- end -}}
+{{- with .Get "maxwidth" -}}
+  {{- $maxwidth := strings.TrimSpace . -}}
+  {{- if findRE $tabulaAbsoluteWidthPattern $maxwidth -}}
+    {{- $styleParts = $styleParts | append (printf `--tabula-max-width: %s;` $maxwidth) -}}
+  {{- else if findRE $tabulaPercentWidthPattern $maxwidth -}}
+    {{- $maxwidthPercent := replaceRE `%$` "" $maxwidth -}}
+    {{- $styleParts = $styleParts | append (printf `--tabula-max-width: calc(var(--content-column-max-width, 38rem) * (%s / 100));` $maxwidthPercent) -}}
+  {{- else -}}
+    {{- errorf "tabula maxwidth must look like 80%%, 42rem, 60ch, or 720px at %s" $.Position -}}
+  {{- end -}}
+{{- end -}}
+{{- $style := delimit $styleParts " " -}}
 
 {{- $captionID := printf "tabula-caption-%d" .Ordinal -}}
 {{- $noteID := printf "tabula-note-%d" .Ordinal -}}
 {{- $note := strings.TrimSpace (default "" (.Get "note")) -}}
 
-<figure class="{{ delimit $figureClasses " " }}">
+<figure class="{{ delimit $figureClasses " " }}" style="{{ $style | safeCSS }}">
   <div
     class="tabula-scroll"
     role="region"
     {{- if $caption }} aria-labelledby="{{ $captionID }}"{{ else }} aria-label="{{ $label }}"{{ end -}}
     {{- if $note }} aria-describedby="{{ $noteID }}"{{ end -}}
-    tabindex="0"
-    {{- with $style }} style="{{ . | safeCSS }}"{{ end }}>
+    tabindex="0">
     <table class="{{ delimit $tableClasses " " }}">
       {{- with $caption }}
       <caption id="{{ $captionID }}">{{ . | $.Page.RenderString (dict "display" "inline") }}</caption>

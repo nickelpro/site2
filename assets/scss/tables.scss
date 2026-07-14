@@ -1,9 +1,12 @@
 $tabula-text: 'Alegreya', serif;
 $tabula-display: 'Alegreya SC', 'Alegreya', serif;
+$tabula-rule-width: 1px;
+$tabula-rule-half-width: calc(#{$tabula-rule-width} / 2);
 
 .tabula-frame {
-  clear: both;
-  margin: 1.8rem 0 2rem;
+  display: flow-root;
+  width: 100%;
+  margin: 1.8rem auto 2rem;
 
   >figcaption {
     max-width: 34rem;
@@ -19,6 +22,7 @@ $tabula-display: 'Alegreya SC', 'Alegreya', serif;
 }
 
 .tabula-frame--wide {
+  clear: both;
   position: relative;
   left: 50%;
   width: calc(100vw - 2rem);
@@ -27,10 +31,11 @@ $tabula-display: 'Alegreya SC', 'Alegreya', serif;
 }
 
 .tabula-scroll {
-  max-width: 100%;
+  width: 100%;
+  margin: 0 auto;
+  max-width: var(--tabula-max-width, 100%);
   overflow-x: auto;
   overscroll-behavior-inline: contain;
-  scrollbar-gutter: stable;
 
   &:focus-visible {
     outline: 2px solid $rubric-blue;
@@ -81,7 +86,7 @@ $tabula-display: 'Alegreya SC', 'Alegreya', serif;
 
   thead {
     border-top: 2px solid $black;
-    border-bottom: 1px solid $code-red;
+    border-bottom: $tabula-rule-width solid $code-red;
   }
 
   tbody {
@@ -95,7 +100,8 @@ $tabula-display: 'Alegreya SC', 'Alegreya', serif;
     text-align: left;
   }
 
-  thead th {
+  thead th,
+  &.tabula--matrix tbody th:first-child {
     vertical-align: bottom;
     font-family: $tabula-display;
     font-size: 0.98em;
@@ -113,11 +119,11 @@ $tabula-display: 'Alegreya SC', 'Alegreya', serif;
   }
 
   tbody tr+tr {
-    border-top: 1px solid rgba(48, 48, 48, 0.18);
+    border-top: $tabula-rule-width solid rgba(48, 48, 48, 0.18);
   }
 
   tbody tr.tabula__row--strong {
-    border-top: 1px solid $code-red;
+    border-top: $tabula-rule-width solid $code-red;
   }
 
   code {
@@ -154,14 +160,69 @@ $tabula-display: 'Alegreya SC', 'Alegreya', serif;
 
 .tabula--matrix {
 
-  th:not(:first-child),
-  td:not(:first-child) {
+  thead th,
+  td {
     text-align: center;
+  }
+
+  thead th.tabula__cell--matrix-corner,
+  tbody th:first-child {
+    text-align: left;
   }
 
   tbody th:first-child {
     white-space: nowrap;
   }
+}
+
+.tabula__cell--matrix-corner {
+  position: relative;
+  width: 1%;
+  min-width: 8.75rem;
+  padding: 0 !important;
+  white-space: normal !important;
+}
+
+.tabula__cell--matrix-corner::before {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top right,
+    transparent calc(50% - #{$tabula-rule-half-width}),
+    $code-red calc(50% - #{$tabula-rule-half-width}),
+    $code-red calc(50% + #{$tabula-rule-half-width}),
+    transparent calc(50% + #{$tabula-rule-half-width}));
+  content: '';
+  pointer-events: none;
+}
+
+.tabula__matrix-corner {
+  position: relative;
+  display: block;
+  min-height: 4.35rem;
+}
+
+.tabula__matrix-corner-col,
+.tabula__matrix-corner-row {
+  position: absolute;
+  display: block;
+  max-width: 64%;
+  line-height: 1.18;
+}
+
+.tabula__matrix-corner-col {
+  top: 0.45rem;
+  right: 0.7rem;
+  text-align: right;
+}
+
+.tabula__matrix-corner-row {
+  bottom: 0.45rem;
+  left: 0.7rem;
+  text-align: left;
+}
+
+.tabula__matrix-corner--has-row:not(.tabula__matrix-corner--has-col) {
+  min-height: 3.8rem;
 }
 
 .tabula--compact {
@@ -220,6 +281,14 @@ $tabula-display: 'Alegreya SC', 'Alegreya', serif;
     }
   }
 
+  .tabula__cell--matrix-corner::before {
+    background: linear-gradient(to top right,
+      transparent calc(50% - #{$tabula-rule-width}),
+      $rubric-red-dark calc(50% - #{$tabula-rule-width}),
+      $rubric-red-dark calc(50% + #{$tabula-rule-width}),
+      transparent calc(50% + #{$tabula-rule-width}));
+  }
+
   .tabula--striped tbody tr:nth-child(even) {
     background: rgba(172, 135, 15, 0.055);
   }
@@ -254,6 +323,33 @@ $tabula-display: 'Alegreya SC', 'Alegreya', serif;
 
   .tabula--compact {
     font-size: 0.94em;
+  }
+
+  .tabula__cell--matrix-corner {
+    min-width: 7.75rem;
+  }
+
+  .tabula__matrix-corner {
+    min-height: 4.1rem;
+  }
+
+  .tabula__matrix-corner-col,
+  .tabula__matrix-corner-row {
+    max-width: 60%;
+  }
+
+  .tabula__matrix-corner-col {
+    top: 0.1rem;
+    right: 0.45rem;
+  }
+
+  .tabula__matrix-corner-row {
+    bottom: 0.1rem;
+    left: 0.45rem;
+  }
+
+  .tabula__matrix-corner--has-row:not(.tabula__matrix-corner--has-col) {
+    min-height: 3.45rem;
   }
 }
 

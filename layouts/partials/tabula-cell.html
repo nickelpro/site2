@@ -9,6 +9,27 @@
 {{- $numeric := eq (lower (printf "%v" (default false ($ctx.Get "numeric")))) "true" -}}
 {{- $nowrap := eq (lower (printf "%v" (default false ($ctx.Get "nowrap")))) "true" -}}
 {{- $label := eq (lower (printf "%v" (default false ($ctx.Get "label")))) "true" -}}
+{{- $corner := eq (lower (printf "%v" (default false ($ctx.Get "corner")))) "true" -}}
+{{- $rowLabel := strings.TrimSpace (default "" ($ctx.Get "rowlabel")) -}}
+{{- $colLabel := strings.TrimSpace (default "" ($ctx.Get "collabel")) -}}
+{{- $rowspan := strings.TrimSpace (printf "%v" (default "" ($ctx.Get "rowspan"))) -}}
+{{- $colspan := strings.TrimSpace (printf "%v" (default "" ($ctx.Get "colspan"))) -}}
+
+{{- if and $corner (ne $tag "th") -}}
+  {{- errorf "corner is only valid on tabula-th at %s" $ctx.Position -}}
+{{- end -}}
+{{- if and (or $rowLabel $colLabel) (not $corner) -}}
+  {{- errorf "rowlabel and collabel are only valid with corner=true on tabula-th at %s" $ctx.Position -}}
+{{- end -}}
+{{- if and $corner (not (or $rowLabel $colLabel)) -}}
+  {{- errorf "tabula-th corner requires rowlabel=, collabel=, or both at %s" $ctx.Position -}}
+{{- end -}}
+{{- if and $rowspan (not (findRE `^[1-9]\d*$` $rowspan)) -}}
+  {{- errorf "%s rowspan must be a positive integer at %s" $ctx.Name $ctx.Position -}}
+{{- end -}}
+{{- if and $colspan (not (findRE `^[1-9]\d*$` $colspan)) -}}
+  {{- errorf "%s colspan must be a positive integer at %s" $ctx.Name $ctx.Position -}}
+{{- end -}}
 
 {{- $outcome := lower (strings.TrimSpace (default "" ($ctx.Get "outcome"))) -}}
 {{- if and $outcome (not (in (slice "yes" "no" "partial") $outcome)) -}}
@@ -17,8 +38,11 @@
 
 {{- $scope := "" -}}
 {{- if eq $tag "th" -}}
-  {{- $scope = lower (strings.TrimSpace (default "col" ($ctx.Get "scope"))) -}}
-  {{- if not (in (slice "row" "col" "rowgroup" "colgroup") $scope) -}}
+  {{- $scope = lower (strings.TrimSpace (default "" ($ctx.Get "scope"))) -}}
+  {{- if and (not $scope) (not $corner) -}}
+    {{- $scope = "col" -}}
+  {{- end -}}
+  {{- if and $scope (not (in (slice "row" "col" "rowgroup" "colgroup") $scope)) -}}
     {{- errorf "tabula-th scope must be row, col, rowgroup, or colgroup at %s" $ctx.Position -}}
   {{- end -}}
 {{- else if $ctx.Get "scope" -}}
@@ -35,6 +59,9 @@
 {{- if $nowrap -}}
   {{- $classes = $classes | append "tabula__cell--nowrap" -}}
 {{- end -}}
+{{- if $corner -}}
+  {{- $classes = $classes | append "tabula__cell--matrix-corner" -}}
+{{- end -}}
 {{- if or $label $outcome -}}
   {{- $classes = $classes | append "tabula__cell--label" -}}
 {{- end -}}
@@ -43,13 +70,31 @@
 {{- end -}}
 
 {{- $inner := .inner | strings.TrimSpace -}}
-{{- if not $inner -}}
+{{- $allowEmpty := and (eq $tag "th") (in (slice "colgroup" "rowgroup") $scope) -}}
+{{- if and (not $corner) (not $allowEmpty) (not $inner) -}}
   {{- errorf "%s requires inner content at %s" $ctx.Name $ctx.Position -}}
 {{- end -}}
-{{- $body := $inner | $ctx.Page.RenderString (dict "display" "inline") -}}
+{{- $body := "" -}}
+{{- if $corner -}}
+  {{- $cornerClasses := slice "tabula__matrix-corner" -}}
+  {{- $cornerParts := slice -}}
+  {{- if $colLabel -}}
+    {{- $cornerClasses = $cornerClasses | append "tabula__matrix-corner--has-col" -}}
+    {{- $renderedColLabel := $colLabel | $ctx.Page.RenderString (dict "display" "inline") -}}
+    {{- $cornerParts = $cornerParts | append (printf `<span class="tabula__matrix-corner-col">%s</span>` $renderedColLabel) -}}
+  {{- end -}}
+  {{- if $rowLabel -}}
+    {{- $cornerClasses = $cornerClasses | append "tabula__matrix-corner--has-row" -}}
+    {{- $renderedRowLabel := $rowLabel | $ctx.Page.RenderString (dict "display" "inline") -}}
+    {{- $cornerParts = $cornerParts | append (printf `<span class="tabula__matrix-corner-row">%s</span>` $renderedRowLabel) -}}
+  {{- end -}}
+  {{- $body = printf `<span class="%s">%s</span>` (delimit $cornerClasses " ") (delimit $cornerParts "") | safeHTML -}}
+{{- else -}}
+  {{- $body = $inner | $ctx.Page.RenderString (dict "display" "inline") -}}
+{{- end -}}
 
 {{- if eq $tag "th" -}}
-<th class="{{ delimit $classes " " }}" scope="{{ $scope }}">{{ $body }}</th>
+<th class="{{ delimit $classes " " }}"{{ with $scope }} scope="{{ . }}"{{ end }}{{ with $colspan }} colspan="{{ . }}"{{ end }}{{ with $rowspan }} rowspan="{{ . }}"{{ end }}>{{ $body }}</th>
 {{- else -}}
-<td class="{{ delimit $classes " " }}">{{ $body }}</td>
+<td class="{{ delimit $classes " " }}"{{ with $colspan }} colspan="{{ . }}"{{ end }}{{ with $rowspan }} rowspan="{{ . }}"{{ end }}>{{ $body }}</td>
 {{- end -}}

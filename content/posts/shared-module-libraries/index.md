@@ -378,8 +378,8 @@ is typical compiler behavior, inline definitions do not manifest in translation
 units which don't use them.
 
 Modules allow programmers to collapse the concept of an interface header and a
-seperate translation unit into a single file, the interface unit. Translating
-**Figure 3** into actual module usage results in **Figure 4**.
+separate translation unit into a single file, the interface unit. Translating
+**Figure 3** into real module usage results in **Figure 4**.
 
 {{<
   collapse label="Figure 4: A Module"
@@ -424,12 +424,15 @@ Symbol Ownership Problem{{< /rb >}}.
 ## A Quick Digression About Static Library ABI
 
 Static libraries are bundles of object files. So long as two compilers agree
-on what the presence, names, and properties of the symbols contained within
-those object files should be, the compilers are ABI compatible and can use
-objects and static libraries produced by the other.
+on the presence, names, and properties of the symbols contained within those
+object files should be, the compilers are ABI compatible and can use objects and
+static libraries produced by each other.
 
 {{< rb >}}Clang{{< /rb >}} and {{< rb >}}MSVC{{< /rb >}} no longer agree on the
-*presence* component of their ABI.{{< sn name-mangling >}}
+*presence* component of their ABI.{{< sn name-mangling >}} Consider the
+provider / consumer relationship from **Figure 4**; if both manifest a
+copy of `value` no problem occurs, but in one arrangement *neither* manifests
+a definition of `value` and the link fails.
 
 {{< sidenote ident=name-mangling >}}
 They don't agree on the *names* component either, but this is recognized as
@@ -438,12 +441,13 @@ a {{< rb >}}Clang{{< /rb >}} bug. See
 {{< /sidenote >}}
 
 {{< tabula
-  caption="ABI Compatibility Producer vs. Consumer"
+  caption="Static ABI Compatibility"
   matrix=true
+  maxwidth="75%"
 >}}
   {{< tabula-head >}}
     {{< tabula-row >}}
-      {{< tabula-th >}}.{{< /tabula-th >}}
+      {{< tabula-th corner=true rowlabel="Consumer" collabel="Provider" />}}
       {{< tabula-th >}}Clang{{< /tabula-th >}}
       {{< tabula-th >}}MSVC{{< /tabula-th >}}
     {{< /tabula-row >}}
@@ -462,6 +466,29 @@ a {{< rb >}}Clang{{< /rb >}} bug. See
   {{< /tabula-body >}}
 {{< /tabula >}}
 
+It's unclear who owns this bug; this is unlike a typical ABI break.
+{{< rb >}}Clang{{< /rb >}} and {{< rb >}}MSVC{{< /rb >}} have intentionally
+different BMI semantics, but here those semantics leak into the ABI domain.
+Regardless, {{< rb blue >}}interface unit symbol ownership{{< /rb >}} can break
+code without needing to mix compilers.
+
 ## The Problem
+
+Unexported, {{< rb blue >}}vague linkage{{< /rb >}}, symbols have an interesting
+relationship with dynamic linkage and shared libraries. In a statically linked
+binary there will be exactly one copy of the symbol. In a dynamically linked
+collection of binaries there will be one copy per linked artifact. Each shared
+library and each dynamically linked executable will have its own independent
+copy of the symbol.
+
+This might sound odd at first, but it's the intended behavior for some library
+symbols. For example, Microsoft's {{< rb >}}Standard Template Library{{< /rb >}}
+relies on this behavior for `_Global_tzdb_list`, to avoid ABI problems
+associated with exporting this symbol.{{< sn ms-abi >}}
+
+{{< sidenote ident=ms-abi side=left >}}
+For those in the know: it's `_ITERATOR_DEBUG_LEVEL`. The global timezone list
+is polluted, so it can't be exported.
+{{< /sidenote >}}
 
 ## Coda
