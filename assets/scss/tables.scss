@@ -1,0 +1,274 @@
+$tabula-text: 'Alegreya', serif;
+$tabula-display: 'Alegreya SC', 'Alegreya', serif;
+
+.tabula-frame {
+  clear: both;
+  margin: 1.8rem 0 2rem;
+
+  >figcaption {
+    max-width: 34rem;
+    margin: 0.5rem auto 0;
+    padding: 0;
+    font-family: $tabula-text;
+    font-size: 0.82rem;
+    font-style: italic;
+    font-weight: 500;
+    line-height: 1.35;
+    text-align: center;
+  }
+}
+
+.tabula-frame--wide {
+  position: relative;
+  left: 50%;
+  width: calc(100vw - 2rem);
+  max-width: 64rem;
+  transform: translateX(-50%);
+}
+
+.tabula-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-gutter: stable;
+
+  &:focus-visible {
+    outline: 2px solid $rubric-blue;
+    outline-offset: 0.35rem;
+  }
+}
+
+.tabula {
+  width: 100%;
+  min-width: var(--tabula-min-width, 100%);
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-family: $tabula-text;
+  font-size: 0.96em;
+  font-weight: 500;
+  font-variant-numeric: lining-nums proportional-nums;
+  line-height: 1.32;
+
+  caption {
+    padding: 0 1rem 0.65rem;
+    color: inherit;
+    font-family: $tabula-display;
+    font-size: 1.06em;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: 0.025em;
+    line-height: 1.18;
+    text-align: center;
+  }
+
+  &.tabula--ornamented caption::before,
+  &.tabula--ornamented caption::after {
+    color: $code-red;
+    font-family: Symbola;
+    font-size: 0.8em;
+    font-weight: normal;
+    letter-spacing: 0;
+    content: '\2767';
+  }
+
+  &.tabula--ornamented caption::before {
+    margin-right: 0.55em;
+  }
+
+  &.tabula--ornamented caption::after {
+    margin-left: 0.55em;
+  }
+
+  thead {
+    border-top: 2px solid $black;
+    border-bottom: 1px solid $code-red;
+  }
+
+  tbody {
+    border-bottom: 2px solid $black;
+  }
+
+  th,
+  td {
+    padding: 0.55rem 0.7rem;
+    vertical-align: top;
+    text-align: left;
+  }
+
+  thead th {
+    vertical-align: bottom;
+    font-family: $tabula-display;
+    font-size: 0.98em;
+    font-style: normal;
+    font-weight: 700;
+    letter-spacing: 0.025em;
+    line-height: 1.16;
+  }
+
+  // Row stubs remain mixed-case Alegreya: clearer for acronyms, flags, and proper names.
+  tbody th {
+    font-family: $tabula-text;
+    font-weight: 700;
+    line-height: 1.24;
+  }
+
+  tbody tr+tr {
+    border-top: 1px solid rgba(48, 48, 48, 0.18);
+  }
+
+  tbody tr.tabula__row--strong {
+    border-top: 1px solid $code-red;
+  }
+
+  code {
+    font-size: 0.84em;
+    white-space: nowrap;
+  }
+}
+
+.tabula__cell--center {
+  text-align: center !important;
+}
+
+.tabula__cell--right {
+  text-align: right !important;
+}
+
+.tabula__cell--left {
+  text-align: left !important;
+}
+
+.tabula__cell--nowrap {
+  white-space: nowrap;
+}
+
+.tabula__cell--label {
+  font-weight: 700;
+}
+
+.tabula__cell--numeric {
+  text-align: right !important;
+  font-variant-numeric: tabular-nums lining-nums;
+  white-space: nowrap;
+}
+
+.tabula--matrix {
+
+  th:not(:first-child),
+  td:not(:first-child) {
+    text-align: center;
+  }
+
+  tbody th:first-child {
+    white-space: nowrap;
+  }
+}
+
+.tabula--compact {
+  font-size: 0.9em;
+
+  th,
+  td {
+    padding: 0.36rem 0.55rem;
+  }
+}
+
+.tabula--striped tbody tr:nth-child(even) {
+  background: rgba(48, 48, 48, 0.035);
+}
+
+// Text remains explicit; color merely reinforces the result.
+.tabula .outcome--yes {
+  color: $rubric-blue;
+}
+
+.tabula .outcome--no {
+  color: $code-red;
+}
+
+.tabula .outcome--partial {
+  font-style: italic;
+}
+
+.dark-mode {
+  .tabula-scroll:focus-visible {
+    outline-color: $rubric-blue-dark;
+  }
+
+  .tabula {
+
+    thead,
+    tbody {
+      border-color: $gold;
+    }
+
+    thead {
+      border-bottom-color: $rubric-red-dark;
+    }
+
+    tbody tr+tr {
+      border-top-color: rgba(172, 135, 15, 0.24);
+    }
+
+    tbody tr.tabula__row--strong {
+      border-top-color: $rubric-red-dark;
+    }
+
+    &.tabula--ornamented caption::before,
+    &.tabula--ornamented caption::after {
+      color: $rubric-red-dark;
+    }
+  }
+
+  .tabula--striped tbody tr:nth-child(even) {
+    background: rgba(172, 135, 15, 0.055);
+  }
+
+  .tabula .outcome--yes {
+    color: $rubric-blue-dark;
+  }
+
+  .tabula .outcome--no {
+    color: $rubric-red-dark;
+  }
+}
+
+@media screen and (max-width: $break-small) {
+  .tabula-frame {
+    margin: 1.5rem 0;
+  }
+
+  .tabula-frame--wide {
+    width: calc(100vw - 1rem);
+  }
+
+  .tabula {
+    // Keep the table at the mobile body size; do not compound the smaller root size.
+    font-size: 1em;
+
+    th,
+    td {
+      padding: 0.46rem 0.55rem;
+    }
+  }
+
+  .tabula--compact {
+    font-size: 0.94em;
+  }
+}
+
+@media print {
+  .tabula-frame--wide {
+    left: auto;
+    width: 100%;
+    transform: none;
+  }
+
+  .tabula-scroll {
+    overflow: visible;
+  }
+
+  .tabula {
+    min-width: 0 !important;
+  }
+}

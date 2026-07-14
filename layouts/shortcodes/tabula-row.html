@@ -1,0 +1,15 @@
+{{- $inner := .Inner -}}
+{{- $rule := lower (strings.TrimSpace (default "" (.Get "rule"))) -}}
+{{- $classes := slice "tabula__row" -}}
+{{- if eq $rule "strong" -}}
+  {{- $classes = $classes | append "tabula__row--strong" -}}
+{{- else if $rule -}}
+  {{- errorf "tabula-row rule must be strong at %s" .Position -}}
+{{- end -}}
+
+{{- if not (strings.TrimSpace $inner) -}}
+  {{- errorf "tabula-row requires cells at %s" .Position -}}
+{{- end -}}
+<tr class="{{ delimit $classes " " }}">
+  {{- $inner | safeHTML }}
+</tr>

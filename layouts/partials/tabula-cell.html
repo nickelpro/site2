@@ -1,0 +1,55 @@
+{{- $ctx := .ctx -}}
+{{- $tag := .tag -}}
+
+{{- $align := lower (strings.TrimSpace (default "" ($ctx.Get "align"))) -}}
+{{- if and $align (not (in (slice "left" "center" "right") $align)) -}}
+  {{- errorf "%s align must be left, center, or right at %s" $ctx.Name $ctx.Position -}}
+{{- end -}}
+
+{{- $numeric := eq (lower (printf "%v" (default false ($ctx.Get "numeric")))) "true" -}}
+{{- $nowrap := eq (lower (printf "%v" (default false ($ctx.Get "nowrap")))) "true" -}}
+{{- $label := eq (lower (printf "%v" (default false ($ctx.Get "label")))) "true" -}}
+
+{{- $outcome := lower (strings.TrimSpace (default "" ($ctx.Get "outcome"))) -}}
+{{- if and $outcome (not (in (slice "yes" "no" "partial") $outcome)) -}}
+  {{- errorf "%s outcome must be yes, no, or partial at %s" $ctx.Name $ctx.Position -}}
+{{- end -}}
+
+{{- $scope := "" -}}
+{{- if eq $tag "th" -}}
+  {{- $scope = lower (strings.TrimSpace (default "col" ($ctx.Get "scope"))) -}}
+  {{- if not (in (slice "row" "col" "rowgroup" "colgroup") $scope) -}}
+    {{- errorf "tabula-th scope must be row, col, rowgroup, or colgroup at %s" $ctx.Position -}}
+  {{- end -}}
+{{- else if $ctx.Get "scope" -}}
+  {{- errorf "scope is only valid on tabula-th at %s" $ctx.Position -}}
+{{- end -}}
+
+{{- $classes := slice "tabula__cell" -}}
+{{- with $align -}}
+  {{- $classes = $classes | append (printf "tabula__cell--%s" .) -}}
+{{- end -}}
+{{- if $numeric -}}
+  {{- $classes = $classes | append "tabula__cell--numeric" -}}
+{{- end -}}
+{{- if $nowrap -}}
+  {{- $classes = $classes | append "tabula__cell--nowrap" -}}
+{{- end -}}
+{{- if or $label $outcome -}}
+  {{- $classes = $classes | append "tabula__cell--label" -}}
+{{- end -}}
+{{- with $outcome -}}
+  {{- $classes = $classes | append (printf "outcome--%s" .) -}}
+{{- end -}}
+
+{{- $inner := .inner | strings.TrimSpace -}}
+{{- if not $inner -}}
+  {{- errorf "%s requires inner content at %s" $ctx.Name $ctx.Position -}}
+{{- end -}}
+{{- $body := $inner | $ctx.Page.RenderString (dict "display" "inline") -}}
+
+{{- if eq $tag "th" -}}
+<th class="{{ delimit $classes " " }}" scope="{{ $scope }}">{{ $body }}</th>
+{{- else -}}
+<td class="{{ delimit $classes " " }}">{{ $body }}</td>
+{{- end -}}

@@ -418,7 +418,8 @@ discover some of the rules, but curious readers are better off reverse
 engineering this behavior the usual way.
 {{< /sidenote >}}
 
-Obviously, this change is causing some problems.
+This change in behavior is the root of the {{< rb blue >}}Interface Unit
+Symbol Ownership Problem{{< /rb >}}.
 
 ## A Quick Digression About Static Library ABI
 
@@ -436,6 +437,30 @@ a {{< rb >}}Clang{{< /rb >}} bug. See
 [Clang Issue #89781](https://github.com/llvm/llvm-project/issues/89781).
 {{< /sidenote >}}
 
+{{< tabula
+  caption="ABI Compatibility Producer vs. Consumer"
+  matrix=true
+>}}
+  {{< tabula-head >}}
+    {{< tabula-row >}}
+      {{< tabula-th >}}.{{< /tabula-th >}}
+      {{< tabula-th >}}Clang{{< /tabula-th >}}
+      {{< tabula-th >}}MSVC{{< /tabula-th >}}
+    {{< /tabula-row >}}
+  {{< /tabula-head >}}
+  {{< tabula-body >}}
+    {{< tabula-row >}}
+      {{< tabula-th scope="row" >}}Clang{{< /tabula-th >}}
+      {{< tabula-td outcome="yes" >}}Links{{< /tabula-td >}}
+      {{< tabula-td outcome="yes" >}}Links{{< /tabula-td >}}
+    {{< /tabula-row >}}
+    {{< tabula-row >}}
+      {{< tabula-th scope="row" >}}MSVC{{< /tabula-th >}}
+      {{< tabula-td outcome="no" >}}Fails{{< /tabula-td >}}
+      {{< tabula-td outcome="yes" >}}Links{{< /tabula-td >}}
+    {{< /tabula-row >}}
+  {{< /tabula-body >}}
+{{< /tabula >}}
 
 ## The Problem
 

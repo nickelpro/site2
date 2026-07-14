@@ -1,0 +1,7 @@
+{{- $inner := .Inner | strings.TrimSpace -}}
+{{- if not $inner -}}
+  {{- errorf "tabula-head requires rows at %s" .Position -}}
+{{- end -}}
+<thead>
+  {{- $inner | safeHTML }}
+</thead>

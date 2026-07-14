@@ -14,6 +14,23 @@
   font-display: swap;
 }
 
+
+@font-face {
+  font-family: 'Alegreya';
+  font-style: normal;
+  font-weight: 500;
+  src: url(../../fonts/Alegreya/Alegreya-Medium.woff2) format('woff2');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Alegreya';
+  font-style: italic;
+  font-weight: 500;
+  src: url(../../fonts/Alegreya/Alegreya-MediumItalic.woff2) format('woff2');
+  font-display: swap;
+}
+
 @font-face {
   font-family: 'Alegreya';
   font-style: normal;
